@@ -21,7 +21,7 @@
 
 --*/
 
-#include <ft5x\ftinternal.h>
+#include <nt36xxx\ntinternal.h>
 #include <registry.tmh>
 #include <internal.h>
 

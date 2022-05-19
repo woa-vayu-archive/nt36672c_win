@@ -28,7 +28,7 @@
 #include <hid.h>
 #include <gpio.h>
 #include <device.h>
-#include <ft5x/ftinternal.h>
+#include <nt36xxx/ntinternal.h>
 #include <report.h>
 #include <touch_power/touch_power.h>
 #include <device.tmh>

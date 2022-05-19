@@ -21,8 +21,8 @@
 #include <Cross Platform Shim\compat.h>
 #include <spb.h>
 #include <report.h>
-#include <ft5x\ftinternal.h>
-#include <ftinternal.tmh>
+#include <nt36xxx\ntinternal.h>
+#include <ntinternal.tmh>
 
 NTSTATUS
 Ft5xBuildFunctionsTable(
@@ -62,6 +62,15 @@ Ft5xConfigureFunctions(
       return STATUS_SUCCESS;
 }
 
+struct nt36xxx_abs_object {
+    unsigned short x;
+    unsigned short y;
+    unsigned short z;
+    unsigned char tm;
+};
+
+#define TOUCH_MAX_FINGER_NUM 10
+
 NTSTATUS
 Ft5xGetObjectStatusFromControllerF12(
       IN VOID* ControllerContext,
@@ -88,69 +97,84 @@ Return Value:
 
 --*/
 {
-      NTSTATUS status;
-      FT5X_CONTROLLER_CONTEXT* controller;
+    NTSTATUS status;
+    FT5X_CONTROLLER_CONTEXT* controller;
+    controller = (FT5X_CONTROLLER_CONTEXT*)ControllerContext;
 
-      int i, x, y;
-      PFOCAL_TECH_EVENT_DATA controllerData = NULL;
-      controller = (FT5X_CONTROLLER_CONTEXT*)ControllerContext;
+    struct nt36xxx_abs_object objd = { 0, 0, 0, 0 };
+    struct nt36xxx_abs_object* obj = &objd;
 
-      controllerData = ExAllocatePoolWithTag(
-            NonPagedPoolNx,
-            sizeof(FOCAL_TECH_EVENT_DATA),
-            TOUCH_POOL_TAG_F12);
+    //enable TchTranslateToDisplayCoordinates in report.c
 
-      if (controllerData == NULL)
-      {
-            status = STATUS_INSUFFICIENT_RESOURCES;
-            goto exit;
-      }
+    unsigned char input_id = 0;
+    unsigned char point[65] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                  0 };
+    unsigned int ppos = 0;
+    int i, finger_cnt = 0;
 
-      // 
-      // Packets we need is determined by context
-      //
-      status = SpbReadDataSynchronously(SpbContext, 0, controllerData, sizeof(FOCAL_TECH_EVENT_DATA));
+    int max_x = 1080, max_y = 2246;
 
-      if (!NT_SUCCESS(status))
-      {
-            Trace(
-                  TRACE_LEVEL_ERROR,
-                  TRACE_INTERRUPT,
-                  "Error reading finger status data - 0x%08lX",
-                  status);
+    status = SpbReadDataSynchronously(SpbContext, 0, point, sizeof(point));
 
-            goto free_buffer;
-      }
+    if (!NT_SUCCESS(status))
+    {
+        Trace(
+            TRACE_LEVEL_ERROR,
+            TRACE_INTERRUPT,
+            "Error reading finger status data - 0x%08lX",
+            status);
 
-      BYTE X_MSB = 0;
-      BYTE X_LSB = 0;
-      BYTE Y_MSB = 0;
-      BYTE Y_LSB = 0;
+        goto exit;
+    }
 
-      for (i = 0; i < controllerData->NumberOfTouchPoints; i++)
-      {
-            X_MSB = controllerData->TouchData[i].PositionX_High;
-            X_LSB = controllerData->TouchData[i].PositionX_Low;
-            Y_MSB = controllerData->TouchData[i].PositionY_High;
-            Y_LSB = controllerData->TouchData[i].PositionY_Low;
+    for (i = 0; i < TOUCH_MAX_FINGER_NUM; i++) {
+        ppos = 6 * i;
+        input_id = point[ppos + 0] >> 3;
+        if ((input_id == 0) || (input_id > TOUCH_MAX_FINGER_NUM))
+            continue;
+
+        if (((point[ppos] & 0x07) == 0x01) ||
+            ((point[ppos] & 0x07) == 0x02)) {
+            obj->x = (point[ppos + 1] << 4) +
+                (point[ppos + 3] >> 4);
+            obj->y = (point[ppos + 2] << 4) +
+                (point[ppos + 3] & 0xf);
+            if ((obj->x > max_x) ||
+                (obj->y > max_y))
+                continue;
+
+            obj->tm = point[ppos + 4];
+            if (obj->tm == 0)
+                obj->tm = 1;
+
+            obj->z = point[ppos + 5];
+            // if (i < 2) {
+            // 	obj->z += point[i + 63] << 8;
+            // 	if (obj->z > TOUCH_MAX_PRESSURE)
+            // 		obj->z = TOUCH_MAX_PRESSURE;
+            // }
+
+            finger_cnt++;
 
             Data->States[i] = OBJECT_STATE_FINGER_PRESENT_WITH_ACCURATE_POS;
 
-            x = (X_MSB << 8) | X_LSB;
-            y = (Y_MSB << 8) | Y_LSB;
+            Trace(
+                TRACE_LEVEL_ERROR,
+                TRACE_INTERRUPT,
+                "x: %d, y:%d",
+                obj->x, obj->y);
 
-            Data->Positions[i].X = x;
-            Data->Positions[i].Y = y;
-      }
-
-free_buffer:
-      ExFreePoolWithTag(
-            controllerData,
-            TOUCH_POOL_TAG_F12
-      );
+            Data->Positions[i].X = obj->x;
+            Data->Positions[i].Y = obj->y;
+            //printf("x:%d y:%d point:%d\n", (int)obj->x, (int)obj->y, finger_cnt);
+        }
+    }
 
 exit:
-      return status;
+    return status;
 }
 
 NTSTATUS

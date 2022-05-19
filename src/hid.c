@@ -23,7 +23,7 @@
 #include <Cross Platform Shim\compat.h>
 #include <internal.h>
 #include <controller.h>
-#include <ft5x\ftinternal.h>
+#include <nt36xxx\ntinternal.h>
 #include <hid.h>
 #include <hid.tmh>
 

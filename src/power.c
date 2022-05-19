@@ -22,7 +22,7 @@
 #include <Cross Platform Shim\compat.h>
 #include <controller.h>
 #include <spb.h>
-#include <ft5x\ftinternal.h>
+#include <nt36xxx\ntinternal.h>
 #include <internal.h>
 #include <touch_power\touch_power.h>
 #include <power.tmh>
