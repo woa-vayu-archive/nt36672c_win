@@ -337,7 +337,7 @@ OnPrepareHardware(
 
         if (res->Type == CmResourceTypeConnection &&
             res->u.Connection.Class == CM_RESOURCE_CONNECTION_CLASS_SERIAL &&
-            res->u.Connection.Type == CM_RESOURCE_CONNECTION_TYPE_SERIAL_I2C)
+            res->u.Connection.Type == CM_RESOURCE_CONNECTION_TYPE_SERIAL_SPI)
         {
             devContext->I2CContext.I2cResHubId.LowPart =
                 res->u.Connection.IdLowPart;

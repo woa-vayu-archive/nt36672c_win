@@ -197,7 +197,8 @@ SpbReadDataSynchronously(
     IN SPB_CONTEXT* SpbContext,
     IN UCHAR Address,
     _In_reads_bytes_(Length) PVOID Data,
-    IN ULONG Length
+    IN ULONG Length,
+    IN BOOLEAN hack
 )
 /*++
 
@@ -318,7 +319,10 @@ SpbReadDataSynchronously(
     //
     // Copy back to the caller's buffer
     //
-    RtlCopyMemory(Data, buffer, Length);
+    if (hack)
+        RtlCopyMemory(Data, buffer + 2, Length - 2);
+    else
+        RtlCopyMemory(Data, buffer, Length);
 
 exit:
     if (NULL != memory)

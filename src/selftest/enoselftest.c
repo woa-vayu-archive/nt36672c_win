@@ -133,7 +133,8 @@ Return Value:
             &devContext->I2CContext,
             headerTemp.Address,
             readBuffer,
-            headerTemp.RequestedTransferLength);
+            headerTemp.RequestedTransferLength,
+            FALSE);
         if (!NT_SUCCESS(status))
         {
             goto exit;

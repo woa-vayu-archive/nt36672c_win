@@ -22,6 +22,7 @@
 #include <spb.h>
 #include <report.h>
 #include <nt36xxx\ntinternal.h>
+#include <nt36xxx\ntfwupdate.h>
 #include <ntinternal.tmh>
 
 NTSTATUS
@@ -56,10 +57,33 @@ Ft5xConfigureFunctions(
       IN SPB_CONTEXT* SpbContext
 )
 {
-      UNREFERENCED_PARAMETER(SpbContext);
-      UNREFERENCED_PARAMETER(ControllerContext);
+    FT5X_CONTROLLER_CONTEXT* controller;
+    controller = (FT5X_CONTROLLER_CONTEXT*)ControllerContext;
 
-      return STATUS_SUCCESS;
+    unsigned char dataBuffer[7] = { 0, 0, 0, 0, 0, 0, 0 };
+
+    if (nt36xxx_bootloader_reset(SpbContext)) {
+        Trace(
+            TRACE_LEVEL_ERROR,
+            TRACE_INTERRUPT,
+            "Can't reset the nvt IC");
+    }
+
+    nt36xxx_sw_reset_idle(SpbContext);
+
+    nt36xxx_set_page(SpbContext, NT36XXX_PAGE_CHIP_INFO);
+
+    SpbReadDataSynchronously(SpbContext, SPI_READ_MASK(NT36XXX_PAGE_CHIP_INFO & NT36XXX_EVT_CHIPID), dataBuffer, sizeof(dataBuffer), FALSE);
+
+    Trace(
+        TRACE_LEVEL_INFORMATION,
+        TRACE_INTERRUPT,
+        "TEST READ: %X %X %X %X %X %X %X",
+        dataBuffer[0], dataBuffer[1], dataBuffer[2], dataBuffer[3], dataBuffer[4], dataBuffer[5], dataBuffer[6]);
+
+    NVTLoadFirmwareFile(controller->FxDevice, SpbContext);
+
+    return STATUS_SUCCESS;
 }
 
 struct nt36xxx_abs_object {
@@ -107,7 +131,8 @@ Return Value:
     //enable TchTranslateToDisplayCoordinates in report.c
 
     unsigned char input_id = 0;
-    unsigned char point[65] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    //65
+    unsigned char point[67] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -115,9 +140,9 @@ Return Value:
     unsigned int ppos = 0;
     int i, finger_cnt = 0;
 
-    int max_x = 1080, max_y = 2246;
+    int max_x = 1600, max_y = 2560;
 
-    status = SpbReadDataSynchronously(SpbContext, 0, point, sizeof(point));
+    status = SpbReadDataSynchronously(SpbContext, 0, point, sizeof(point), TRUE);
 
     if (!NT_SUCCESS(status))
     {

@@ -333,6 +333,9 @@
     <Link>
       <AdditionalDependencies>%(AdditionalDependencies);$(DDK_LIB_PATH)\HidClass.lib</AdditionalDependencies>
     </Link>
+    <CopyFileToFolders>
+      <DestinationFolders>$(OutDir);$(OutDir)\nt36xxx</DestinationFolders>
+    </CopyFileToFolders>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -408,6 +411,12 @@
     <Link>
       <AdditionalDependencies>%(AdditionalDependencies);$(DDK_LIB_PATH)\HidClass.lib</AdditionalDependencies>
     </Link>
+    <CopyFileToFolders>
+      <DestinationFolders>$(OutDir);$(OutDir)/nt36xxx</DestinationFolders>
+    </CopyFileToFolders>
+    <Inf>
+      <SpecifyDriverVerDirectiveDate>false</SpecifyDriverVerDirectiveDate>
+    </Inf>
   </ItemDefinitionGroup>
   <ItemGroup>
     <Inf Exclude="@(Inf)" Include="..\src\nt36xxx.inf" />
@@ -416,10 +425,11 @@
   <ItemGroup>
     <ClCompile Include="..\src\Cross Platform Shim\bitops.c" />
     <ClCompile Include="..\src\Cross Platform Shim\hweight.c" />
+    <ClCompile Include="..\src\nt36xxx\ntfwupdate.c" />
     <ClCompile Include="..\src\report.c" />
-    <ClCompile Include="..\src\touch_power\touch_power.c" />
-    <ClCompile Include="..\src\selftest\selftest.c" />
     <ClCompile Include="..\src\selftest\enoselftest.c" />
+    <ClCompile Include="..\src\selftest\selftest.c" />
+    <ClCompile Include="..\src\touch_power\touch_power.c" />
     <ClCompile Include="..\src\device.c" />
     <ClCompile Include="..\src\driver.c" />
     <ClCompile Include="..\src\hid.c" />
@@ -439,11 +449,13 @@
     <ClInclude Include="..\include\Cross Platform Shim\bitops.h" />
     <ClInclude Include="..\include\Cross Platform Shim\compat.h" />
     <ClInclude Include="..\include\Cross Platform Shim\hweight.h" />
+    <ClInclude Include="..\Include\nt36xxx\ntfwupdate.h" />
     <ClInclude Include="..\include\report.h" />
+    <ClInclude Include="..\Include\selftest\enoselftest.h" />
+    <ClInclude Include="..\Include\selftest\selftest.h" />
+    <ClInclude Include="..\Include\spb.h" />
     <ClInclude Include="..\include\touch_power\public.h" />
     <ClInclude Include="..\include\touch_power\touch_power.h" />
-    <ClInclude Include="..\include\selftest\enoselftest.h" />
-    <ClInclude Include="..\include\selftest\selftest.h" />
     <ClInclude Include="..\include\controller.h" />
     <ClInclude Include="..\include\device.h" />
     <ClInclude Include="..\include\driver.h" />
@@ -454,9 +466,13 @@
     <ClInclude Include="..\include\queue.h" />
     <ClInclude Include="..\include\resolutions.h" />
     <ClInclude Include="..\include\resource.h" />
-    <ClInclude Include="..\include\spb.h" />
     <ClInclude Include="..\include\trace.h" />
     <ClInclude Include="..\include\nt36xxx\ntinternal.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="..\firmware\novatek_nt36523_fw.bin">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>

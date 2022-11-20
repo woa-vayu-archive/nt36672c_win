@@ -43,7 +43,8 @@ SpbReadDataSynchronously(
     _In_ SPB_CONTEXT *SpbContext,
     _In_ UCHAR Address,
     _In_reads_bytes_(Length) PVOID Data,
-    _In_ ULONG Length
+    _In_ ULONG Length,
+    IN BOOLEAN hack
     );
 
 VOID
