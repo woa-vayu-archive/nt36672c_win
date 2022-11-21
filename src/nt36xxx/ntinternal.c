@@ -140,7 +140,7 @@ Return Value:
     unsigned int ppos = 0;
     int i, finger_cnt = 0;
 
-    int max_x = 1600, max_y = 2560;
+    int max_x = 1080, max_y = 2400;
 
     status = SpbReadDataSynchronously(SpbContext, 0, point, sizeof(point), TRUE);
 
