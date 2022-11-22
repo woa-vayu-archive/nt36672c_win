@@ -59,7 +59,7 @@ typedef struct _HID_TOUCH_FINGER {
 #pragma pack(pop)
 
 typedef struct _HID_TOUCH_REPORT {
-	HID_TOUCH_FINGER Contacts[2];
+	HID_TOUCH_FINGER Contacts[10];
 	UCHAR            ContactCount;
 } HID_TOUCH_REPORT, * PHID_TOUCH_REPORT;
 
@@ -335,15 +335,40 @@ TchReadReport(
 		REPORT_ID, REPORTID_FINGER, /* Report ID (1) */ \
 		USAGE, 0x22, /* Usage (Finger) */ \
 		FOCALTECH_FT5X_DIGITIZER_FINGER_CONTACT, /* Finger Contact (1) */ \
-		USAGE, 0x00, /* Usage (Undefined) */ \
+		USAGE_PAGE, 0x0D, /* Usage Page (Digitizer) */ \
+		USAGE, 0x22, /* Usage (Finger) */ \
 		FOCALTECH_FT5X_DIGITIZER_FINGER_CONTACT, /* Finger Contact (2) */ \
+		USAGE_PAGE, 0x0D, /* Usage Page (Digitizer) */ \
+		USAGE, 0x22, /* Usage (Finger) */ \
+		FOCALTECH_FT5X_DIGITIZER_FINGER_CONTACT, /* Finger Contact (3) */ \
+		USAGE_PAGE, 0x0D, /* Usage Page (Digitizer) */ \
+		USAGE, 0x22, /* Usage (Finger) */ \
+		FOCALTECH_FT5X_DIGITIZER_FINGER_CONTACT, /* Finger Contact (4) */ \
+		USAGE_PAGE, 0x0D, /* Usage Page (Digitizer) */ \
+		USAGE, 0x22, /* Usage (Finger) */ \
+		FOCALTECH_FT5X_DIGITIZER_FINGER_CONTACT, /* Finger Contact (5) */ \
+		USAGE_PAGE, 0x0D, /* Usage Page (Digitizer) */ \
+		USAGE, 0x22, /* Usage (Finger) */ \
+		FOCALTECH_FT5X_DIGITIZER_FINGER_CONTACT, /* Finger Contact (6) */ \
+		USAGE_PAGE, 0x0D, /* Usage Page (Digitizer) */ \
+		USAGE, 0x22, /* Usage (Finger) */ \
+		FOCALTECH_FT5X_DIGITIZER_FINGER_CONTACT, /* Finger Contact (7) */ \
+		USAGE_PAGE, 0x0D, /* Usage Page (Digitizer) */ \
+		USAGE, 0x22, /* Usage (Finger) */ \
+		FOCALTECH_FT5X_DIGITIZER_FINGER_CONTACT, /* Finger Contact (8) */ \
+		USAGE_PAGE, 0x0D, /* Usage Page (Digitizer) */ \
+		USAGE, 0x22, /* Usage (Finger) */ \
+		FOCALTECH_FT5X_DIGITIZER_FINGER_CONTACT, /* Finger Contact (9) */ \
+		USAGE_PAGE, 0x0D, /* Usage Page (Digitizer) */ \
+		USAGE, 0x22, /* Usage (Finger) */ \
+		FOCALTECH_FT5X_DIGITIZER_FINGER_CONTACT, /* Finger Contact (10) */ \
 		USAGE_PAGE, 0x0D, /* Usage Page (Digitizer) */ \
 		USAGE, 0x54, /* Usage (Contact Count) */ \
 		REPORT_SIZE, 0x08, /* Report Size (8) */ \
 		INPUT, 0x02, /* Input: (Data, Var, Abs) */ \
 		REPORT_ID, REPORTID_DEVICE_CAPS, /* Report ID (8) */ \
 		USAGE, 0x55, /* Usage (Maximum Contacts) */ \
-		LOGICAL_MAXIMUM, 0x02, /* Logical Maximum (2) */ \
+		LOGICAL_MAXIMUM, 0x0a, /* Logical Maximum (10) */ \
 		FEATURE, 0x02, /* Feature: (Data, Var, Abs) */ \
 		USAGE_PAGE_1, 0x00, 0xff, \
 		REPORT_ID, REPORTID_PTPHQA, \
