@@ -117,7 +117,7 @@ static void nvt_set_bld_crc_bank(unsigned int DES_ADDR, unsigned int SRAM_ADDR,
     fwbuf[0] = (size) & 0xFF;
     fwbuf[1] = (size >> 8) & 0xFF;
     fwbuf[2] = (size >> 16) & 0x01;
-    SpbWriteDataSynchronously(SpbContext, SPI_WRITE_MASK(LENGTH_ADDR & 0x7F), fwbuf, 3);
+    SpbWriteDataSynchronously(SpbContext, SPI_WRITE_MASK(LENGTH_ADDR & 0x7F), fwbuf, 2);
 
     /* write golden dlm checksum */
     //nvt_set_page(G_CHECKSUM_ADDR);

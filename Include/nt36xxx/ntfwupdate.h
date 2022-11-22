@@ -16,7 +16,7 @@
 
 #define NVT_TRANSFER_LEN (63 * 1024)
 
-#define FWBUFFER_SIZE 0x30000
+#define FWBUFFER_SIZE 0x22000
 
 enum nt36xxx_cmds {
     NT36XXX_CMD_ENTER_SLEEP = 0x11,
