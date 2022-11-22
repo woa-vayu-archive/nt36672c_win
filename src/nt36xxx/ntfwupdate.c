@@ -417,19 +417,7 @@ NVTLoadFirmwareFile(WDFDEVICE FxDevice, SPB_CONTEXT* SpbContext) {
     //nvt_download_firmware_hw_crc
     nt36xxx_bootloader_reset(SpbContext);
 
-    /* [0] ILM */
-    /* write register bank */
-    nvt_set_bld_crc_bank(ILM_DES_ADDR, bin_map[0].SRAM_addr,
-        ILM_LENGTH_ADDR, bin_map[0].size,
-        G_ILM_CHECKSUM_ADDR, bin_map[0].crc, SpbContext);
-
-    /* [1] DLM */
-    /* write register bank */
-    nvt_set_bld_crc_bank(DLM_DES_ADDR, bin_map[1].SRAM_addr,
-        DLM_LENGTH_ADDR, bin_map[1].size,
-        G_DLM_CHECKSUM_ADDR, bin_map[1].crc, SpbContext);
-
-    nt36xxx_write_addr(SpbContext, TX_AUTO_COPY_EN, 0x69);
+    // nt36xxx_write_addr(SpbContext, TX_AUTO_COPY_EN, 0x69);
 
     //nvt_write_firmware
     list = 0;//unsigned int list = 0;
@@ -502,6 +490,18 @@ NVTLoadFirmwareFile(WDFDEVICE FxDevice, SPB_CONTEXT* SpbContext) {
             size -= NVT_TRANSFER_LEN;
         }
     }
+    
+    /* [0] ILM */
+    /* write register bank */
+    nvt_set_bld_crc_bank(ILM_DES_ADDR, bin_map[0].SRAM_addr,
+        ILM_LENGTH_ADDR, bin_map[0].size,
+        G_ILM_CHECKSUM_ADDR, bin_map[0].crc, SpbContext);
+
+    /* [1] DLM */
+    /* write register bank */
+    nvt_set_bld_crc_bank(DLM_DES_ADDR, bin_map[1].SRAM_addr,
+        DLM_LENGTH_ADDR, bin_map[1].size,
+        G_DLM_CHECKSUM_ADDR, bin_map[1].crc, SpbContext);
 
     nvt_bld_crc_enable(SpbContext);
 
