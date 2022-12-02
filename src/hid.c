@@ -397,8 +397,8 @@ TchGenerateHidReportDescriptor(
 
 	touchContext = (FT5X_CONTROLLER_CONTEXT*)devContext->TouchContext;
 
-	PUCHAR hidReportDescBuffer = (PUCHAR)ExAllocatePoolWithTag(
-		NonPagedPool,
+	PUCHAR hidReportDescBuffer = (PUCHAR)ExAllocatePool2(
+		POOL_FLAG_NON_PAGED,
 		gdwcbReportDescriptor,
 		TOUCH_POOL_TAG
 	);
