@@ -200,8 +200,8 @@ Return Value:
 	FT5X_CONTROLLER_CONTEXT* context;
 	NTSTATUS status;
 	
-	context = ExAllocatePoolWithTag(
-		NonPagedPoolNx,
+	context = ExAllocatePool2(
+		POOL_FLAG_NON_PAGED,
 		sizeof(FT5X_CONTROLLER_CONTEXT),
 		TOUCH_POOL_TAG);
 
