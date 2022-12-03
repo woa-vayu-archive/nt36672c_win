@@ -368,7 +368,7 @@ NVTLoadFirmwareFile(WDFDEVICE FxDevice, SPB_CONTEXT* SpbContext) {
             bin_map[list].crc = byte_to_word((unsigned char*)&buffer[pos + 12]);
 
             /* detect header end to protect parser function */
-            if ((bin_map[list].BIN_addr < end) && (bin_map[list].size != 0)) {
+            if ((bin_map[list].BIN_addr == 0) && (bin_map[list].size != 0)) {
                 sprintf(bin_map[list].name, "Header");
                 find_bin_header = 1;
             }
