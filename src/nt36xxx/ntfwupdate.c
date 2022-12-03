@@ -15,8 +15,8 @@ struct nvt_ts_bin_map {
 
 static struct nvt_ts_bin_map* bin_map;
 
-//NT36672A memory map
-unsigned int EVENT_BUF_ADDR = 0x21C00;
+//NT36675 memory map
+unsigned int EVENT_BUF_ADDR = 0x22D00;
 /* Phase 2 Host Download */
 unsigned int BOOT_RDY_ADDR = 0x3F10D;
 //unsigned int TX_AUTO_COPY_EN = 0x3F7E8;
@@ -117,7 +117,7 @@ static void nvt_set_bld_crc_bank(unsigned int DES_ADDR, unsigned int SRAM_ADDR,
     fwbuf[0] = (size) & 0xFF;
     fwbuf[1] = (size >> 8) & 0xFF;
     fwbuf[2] = (size >> 16) & 0x01;
-    SpbWriteDataSynchronously(SpbContext, SPI_WRITE_MASK(LENGTH_ADDR & 0x7F), fwbuf, 2);
+    SpbWriteDataSynchronously(SpbContext, SPI_WRITE_MASK(LENGTH_ADDR & 0x7F), fwbuf, 3);
 
     /* write golden dlm checksum */
     //nvt_set_page(G_CHECKSUM_ADDR);
