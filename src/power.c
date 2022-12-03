@@ -23,6 +23,7 @@
 #include <controller.h>
 #include <spb.h>
 #include <nt36xxx\ntinternal.h>
+#include <nt36xxx\ntfwupdate.h>
 #include <internal.h>
 #include <touch_power\touch_power.h>
 #include <power.tmh>
@@ -81,7 +82,7 @@ TchPowerSettingCallback(
         DWORD PowerState = *(DWORD*)Value;
         switch (PowerState)
         {
-        // On Battery
+            // On Battery
         case PoAc:
             Trace(
                 TRACE_LEVEL_INFORMATION,
@@ -104,7 +105,7 @@ TchPowerSettingCallback(
                 goto exit;
             }
             break;
-        // Plugged In
+            // Plugged In
         case PoDc:
         case PoHot:
             Trace(
@@ -157,6 +158,7 @@ TchPowerSettingCallback(
 
         DWORD DisplayState = *(DWORD*)Value;
         DWORD GestureEnabled = 0;
+        //unsigned char buf[1] = { 0x11 };
 
         switch (DisplayState)
         {
@@ -202,6 +204,10 @@ TchPowerSettingCallback(
                     goto exit;
                 }
             }
+            /*else {
+                //Write command to enter "deep sleep mode" if wake up gesture is disabled
+                SpbWriteDataSynchronously(SpbContext, SPI_WRITE_MASK(NT36XXX_EVT_HOST_CMD), buf, 1);
+            }*/
 
             if (!NT_SUCCESS(status))
             {
@@ -248,6 +254,10 @@ TchPowerSettingCallback(
                     status);
                 goto exit;
             }
+
+            //Load firmware each time after display turned on
+            NVTLoadFirmwareFile(ControllerContext->FxDevice, SpbContext);
+
             break;
         case 2:
             Trace(
@@ -265,15 +275,15 @@ TchPowerSettingCallback(
         }
     }
 
-    exit:
+exit:
     return status;
 }
 
-NTSTATUS 
+NTSTATUS
 TchWakeDevice(
    IN VOID *ControllerContext,
    IN SPB_CONTEXT *SpbContext
-   )
+)
 /*++
 
 Routine Description:
@@ -283,7 +293,7 @@ Routine Description:
 Arguments:
 
    ControllerContext - Touch controller context
-   
+
    SpbContext - A pointer to the current i2c context
 
 Return Value:
@@ -291,7 +301,7 @@ Return Value:
    NTSTATUS indicating success or failure
 
 --*/
-{    
+{
     FT5X_CONTROLLER_CONTEXT* controller;
     NTSTATUS status;
 
@@ -333,8 +343,8 @@ NTSTATUS
 TchStandbyDevice(
    IN VOID *ControllerContext,
    IN SPB_CONTEXT *SpbContext,
-   IN VOID* ReportContext
-   )
+    IN VOID* ReportContext
+)
 /*++
 
 Routine Description:
@@ -344,7 +354,7 @@ Routine Description:
 Arguments:
 
    ControllerContext - Touch controller context
-   
+
    SpbContext - A pointer to the current i2c context
 
 Return Value:
