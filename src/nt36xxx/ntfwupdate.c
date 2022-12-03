@@ -71,7 +71,7 @@ int nt36xxx_bootloader_reset(IN SPB_CONTEXT* SpbContext)
         return ret;
 
     /* MCU has to reboot from bootloader: this is the typical boot time */
-    Interval.QuadPart = 350000;
+    Interval.QuadPart = 3500000;
     KeDelayExecutionThread(KernelMode, FALSE, &Interval);
 
     ret = nt36xxx_write_addr(SpbContext, SPI_RD_FAST_ADDR, 0x00);
@@ -91,7 +91,7 @@ int nt36xxx_sw_reset_idle(IN SPB_CONTEXT* SpbContext)
         return ret;
 
     /* Wait until the MCU resets the fw state */
-    Interval.QuadPart = 150000;
+    Interval.QuadPart = 1500000;
     KeDelayExecutionThread(KernelMode, FALSE, &Interval);
     return ret;
 }
