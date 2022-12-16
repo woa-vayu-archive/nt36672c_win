@@ -81,7 +81,7 @@ Ft5xConfigureFunctions(
         "TEST READ: %X %X %X %X %X %X %X",
         dataBuffer[0], dataBuffer[1], dataBuffer[2], dataBuffer[3], dataBuffer[4], dataBuffer[5], dataBuffer[6]);
 
-    //NVTLoadFirmwareFile(controller->FxDevice, SpbContext);
+    NVTLoadFirmwareFile(controller->FxDevice, SpbContext);
 
     return STATUS_SUCCESS;
 }
