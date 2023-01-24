@@ -1725,8 +1725,8 @@ RtlReadRegistryValue(
 
     len = sizeof(KEY_VALUE_PARTIAL_INFORMATION) + length;
 
-    pinfo = ExAllocatePool2(
-        POOL_FLAG_NON_PAGED, 
+    pinfo = ExAllocatePoolWithTag(
+        NonPagedPool,
         len, 
         TOUCH_POOL_TAG
     );
@@ -1868,8 +1868,8 @@ TchGetTouchSettings(
     // Table passed to RtlQueryRegistryValues must be allocated 
     // from NonPagedPool
     //
-    regTable = ExAllocatePool2(
-        POOL_FLAG_NON_PAGED,
+    regTable = ExAllocatePoolWithTag(
+        NonPagedPool,
         gcbRegistryTable,
         TOUCH_POOL_TAG);
 
