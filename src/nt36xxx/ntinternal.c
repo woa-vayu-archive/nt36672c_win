@@ -59,8 +59,13 @@ Ft5xConfigureFunctions(
 {
     FT5X_CONTROLLER_CONTEXT* controller;
     controller = (FT5X_CONTROLLER_CONTEXT*)ControllerContext;
+    
+    LARGE_INTEGER delay = { 0 };
 
     unsigned char dataBuffer[7] = { 0, 0, 0, 0, 0, 0, 0 };
+    
+    delay.QuadPart = RELATIVE(MILLISECONDS(10));
+	KeDelayExecutionThread(KernelMode, TRUE, &delay);
 
     if (nt36xxx_bootloader_reset(SpbContext)) {
         Trace(
