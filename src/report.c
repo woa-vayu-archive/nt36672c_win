@@ -379,7 +379,7 @@ Return Value:
 
 		currentFingerIndex = 0;
 
-		fingersToReport = min(ReportContext->Cache.DownCount - TouchesReported, 10);
+		fingersToReport = min(ReportContext->Cache.DownCount - TouchesReported, 11);
 
 		HidReport.ReportID = REPORTID_FINGER;
 

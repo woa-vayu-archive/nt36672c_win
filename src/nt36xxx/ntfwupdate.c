@@ -175,6 +175,24 @@ void nvt_boot_ready(SPB_CONTEXT* SpbContext)
 	KeDelayExecutionThread(KernelMode, TRUE, &delay);
 }
 
+void disable_pen_input_device(SPB_CONTEXT* SpbContext, BOOLEAN disable)
+{
+    unsigned char buf[4] = { 0 };
+    
+    LARGE_INTEGER delay = { 0 };
+    
+    delay.QuadPart = RELATIVE(MILLISECONDS(35));
+	KeDelayExecutionThread(KernelMode, TRUE, &delay);
+
+    //---set xdata index to EVENT BUF ADDR---
+    nt36xxx_set_page(SpbContext, EVENT_BUF_ADDR | NT36XXX_EVT_HOST_CMD);
+
+    //---clear fw reset status---
+    buf[0] = 0x7B;
+    buf[1] = disable;
+    SpbWriteDataSynchronously(SpbContext, SPI_WRITE_MASK(NT36XXX_EVT_HOST_CMD & 0x7F), buf, 2);
+}
+
 NTSTATUS
 NVTLoadFirmwareFile(WDFDEVICE FxDevice, SPB_CONTEXT* SpbContext) {
     HANDLE handle;
@@ -515,7 +533,9 @@ NVTLoadFirmwareFile(WDFDEVICE FxDevice, SPB_CONTEXT* SpbContext) {
     nvt_fw_crc_enable(SpbContext);
 
     nvt_boot_ready(SpbContext);
-
+    
+    disable_pen_input_device(SpbContext, FALSE);
+    
     ExFreePoolWithTag((PVOID)buffer, TOUCH_POOL_TAG);
     ExFreePoolWithTag((PVOID)bin_map, TOUCH_POOL_TAG);
     ExFreePoolWithTag((PVOID)fwbuf, TOUCH_POOL_TAG);

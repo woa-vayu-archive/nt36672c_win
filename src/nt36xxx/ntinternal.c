@@ -136,9 +136,15 @@ Return Value:
     //enable TchTranslateToDisplayCoordinates in report.c
 
     unsigned char input_id = 0;
-    unsigned char point[65];
+    unsigned char point[79];
     unsigned int ppos = 0;
     int i, finger_cnt = 0;
+    
+    unsigned char pen_format_id = 0;
+    unsigned int pen_x = 0;
+    unsigned int pen_y = 0;
+    unsigned int pen_pressure = 0;
+    unsigned int pen_distance = 0;
 
     int max_x = 1600, max_y = 2560;
 
@@ -189,12 +195,43 @@ Return Value:
             Trace(
                 TRACE_LEVEL_ERROR,
                 TRACE_INTERRUPT,
-                "x: %d, y:%d",
+                "TOUCH x: %d, y:%d",
                 obj->x, obj->y);
 
             Data->Positions[i].X = obj->x;
             Data->Positions[i].Y = obj->y;
             //printf("x:%d y:%d point:%d\n", (int)obj->x, (int)obj->y, finger_cnt);
+        }
+    }
+    
+    pen_format_id = point[65];
+    if (pen_format_id != 0xFF) {
+        if (pen_format_id == 0x01) {
+            pen_x = (unsigned int)(point[66] << 8) + (unsigned int)(point[67]);
+			pen_y = (unsigned int)(point[68] << 8) + (unsigned int)(point[69]);
+            if ((int)pen_x >= max_x * 2 - 1) {
+                pen_x -= 1;
+            }
+            if ((int)pen_y >= max_y * 2 - 1) {
+                pen_y -= 1;
+            }
+            pen_pressure = (unsigned int)(point[70] << 8) + (unsigned int)(point[71]);
+            //pen_tilt_x = (int)point[72];
+            //pen_tilt_y = (int)point[73];
+            pen_distance = (unsigned int)(point[74] << 8) + (unsigned int)(point[75]);
+            //pen_btn1 = (unsigned int)(point[76] & 0x01);
+            //pen_btn2 = (unsigned int)((point[76] >> 1) & 0x01);
+            
+            Data->States[10] = OBJECT_STATE_PEN_PRESENT_WITH_TIP;
+
+            Trace(
+                TRACE_LEVEL_ERROR,
+                TRACE_INTERRUPT,
+                "PEN x: %d, y:%d",
+                pen_x, pen_y);
+
+            Data->Positions[10].X = pen_x;
+            Data->Positions[10].Y = pen_y;
         }
     }
 
