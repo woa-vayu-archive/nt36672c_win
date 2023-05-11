@@ -141,6 +141,8 @@ ReportPen(
 	IN USHORT  YTilt
 )
 {
+	UNREFERENCED_PARAMETER(TipSwitch);
+
 	NTSTATUS status;
 	HID_INPUT_REPORT HidReport;
 	RtlZeroMemory(&HidReport, sizeof(HID_INPUT_REPORT));
@@ -152,15 +154,15 @@ ReportPen(
 	// Perform per-platform x/y adjustments to controller coordinates
 	//
 	//there are two of these
-	TchTranslateToDisplayCoordinates(
+	/*TchTranslateToDisplayCoordinates(
 		&ScratchX,
 		&ScratchY,
-		&ReportContext->Props);
+		&ReportContext->Props);*/
 
 	HidReport.ReportID = REPORTID_STYLUS;
 
 	HidReport.PenReport.InRange = InRange;
-	HidReport.PenReport.TipSwitch = TipSwitch;
+	HidReport.PenReport.TipSwitch = !!TipPressure;
 	HidReport.PenReport.Eraser = Eraser;
 	HidReport.PenReport.Invert = Invert;
 	HidReport.PenReport.BarrelSwitch = BarrelSwitch;
@@ -423,15 +425,15 @@ Return Value:
 				status = ReportPen(
 					ReportContext,
 					TRUE,
-					FALSE,
+					data.PenBarrelSwitch,
 					info.status == OBJECT_STATE_PEN_PRESENT_WITH_ERASER,
 					info.status == OBJECT_STATE_PEN_PRESENT_WITH_ERASER,
 					TRUE,
 					(USHORT)info.x,
 					(USHORT)info.y,
-					1,
-					0,
-					0);
+					data.PenPressure,
+					data.PenTiltX,
+					data.PenTiltY);
 				if (!NT_SUCCESS(status))
 				{
 					Trace(

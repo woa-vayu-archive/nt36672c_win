@@ -68,6 +68,10 @@ typedef struct _DETECTED_OBJECTS
 {
 	OBJECT_STATE States[MAX_TOUCHES];
 	DETECTED_OBJECT_POSITION Positions[MAX_TOUCHES];
+	unsigned short PenPressure;
+	unsigned char PenTiltX;
+	unsigned char PenTiltY;
+	unsigned char PenBarrelSwitch;
 } DETECTED_OBJECTS;
 
 typedef struct _BUTTON_CACHE
