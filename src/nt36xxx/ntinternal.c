@@ -136,12 +136,7 @@ Return Value:
     //enable TchTranslateToDisplayCoordinates in report.c
 
     unsigned char input_id = 0;
-    //65
-    unsigned char point[67] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                  0 };
+    unsigned char point[65];
     unsigned int ppos = 0;
     int i, finger_cnt = 0;
 

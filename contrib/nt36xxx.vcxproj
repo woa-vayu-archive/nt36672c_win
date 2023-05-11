@@ -427,8 +427,6 @@
     <ClCompile Include="..\src\Cross Platform Shim\hweight.c" />
     <ClCompile Include="..\src\nt36xxx\ntfwupdate.c" />
     <ClCompile Include="..\src\report.c" />
-    <ClCompile Include="..\src\selftest\enoselftest.c" />
-    <ClCompile Include="..\src\selftest\selftest.c" />
     <ClCompile Include="..\src\touch_power\touch_power.c" />
     <ClCompile Include="..\src\device.c" />
     <ClCompile Include="..\src\driver.c" />
@@ -451,8 +449,6 @@
     <ClInclude Include="..\include\Cross Platform Shim\hweight.h" />
     <ClInclude Include="..\Include\nt36xxx\ntfwupdate.h" />
     <ClInclude Include="..\include\report.h" />
-    <ClInclude Include="..\Include\selftest\enoselftest.h" />
-    <ClInclude Include="..\Include\selftest\selftest.h" />
     <ClInclude Include="..\Include\spb.h" />
     <ClInclude Include="..\include\touch_power\public.h" />
     <ClInclude Include="..\include\touch_power\touch_power.h" />

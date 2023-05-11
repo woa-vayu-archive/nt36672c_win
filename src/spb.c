@@ -235,21 +235,26 @@ SpbReadDataSynchronously(
     //
     // Read transactions start by writing an address pointer
     //
-    status = SpbDoWriteDataSynchronously(
-        SpbContext,
-        Address,
-        NULL,
-        0);
+    if (Address != 0) {
+        status = SpbDoWriteDataSynchronously(
+            SpbContext,
+            Address,
+            NULL,
+            0);
 
-    if (!NT_SUCCESS(status))
-    {
-        Trace(
-            TRACE_LEVEL_ERROR,
-            TRACE_SPB,
-            "Error setting address pointer for Spb read - 0x%08lX",
-            status);
-        goto exit;
+        if (!NT_SUCCESS(status))
+        {
+            Trace(
+                TRACE_LEVEL_ERROR,
+                TRACE_SPB,
+                "Error setting address pointer for Spb read - 0x%08lX",
+                status);
+            goto exit;
+        }
     }
+
+    if (hack)
+        Length = Length + 2;
 
     if (Length > DEFAULT_SPB_BUFFER_SIZE)
     {
