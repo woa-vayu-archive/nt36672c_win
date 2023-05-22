@@ -4,6 +4,43 @@
 #include <wdf.h>
 #include <controller.h>
 
+/*
+* Rob Green, a member of the NTDEV list, provides the
+* following set of macros that'll keep you from having
+* to scratch your head and count zeros ever again.
+* Using these defintions, all you'll have to do is write:
+*
+* interval.QuadPart = RELATIVE(SECONDS(5));
+*/
+
+#ifndef ABSOLUTE
+#define ABSOLUTE(wait) (wait)
+#endif
+
+#ifndef RELATIVE
+#define RELATIVE(wait) (-(wait))
+#endif
+
+#ifndef NANOSECONDS
+#define NANOSECONDS(nanos) \
+	(((signed __int64)(nanos)) / 100L)
+#endif
+
+#ifndef MICROSECONDS
+#define MICROSECONDS(micros) \
+	(((signed __int64)(micros)) * NANOSECONDS(1000L))
+#endif
+
+#ifndef MILLISECONDS
+#define MILLISECONDS(milli) \
+	(((signed __int64)(milli)) * MICROSECONDS(1000L))
+#endif
+
+#ifndef SECONDS
+#define SECONDS(seconds) \
+	(((signed __int64)(seconds)) * MILLISECONDS(1000L))
+#endif
+
 #define SPI_WRITE_MASK(a)	(a | 0x80)
 #define SPI_READ_MASK(a)	(a & 0x7F)
 

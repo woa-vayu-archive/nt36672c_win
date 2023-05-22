@@ -59,8 +59,13 @@ Ft5xConfigureFunctions(
 {
     FT5X_CONTROLLER_CONTEXT* controller;
     controller = (FT5X_CONTROLLER_CONTEXT*)ControllerContext;
+    
+    LARGE_INTEGER delay = { 0 };
 
     unsigned char dataBuffer[7] = { 0, 0, 0, 0, 0, 0, 0 };
+    
+    delay.QuadPart = RELATIVE(MILLISECONDS(10));
+	KeDelayExecutionThread(KernelMode, TRUE, &delay);
 
     if (nt36xxx_bootloader_reset(SpbContext)) {
         Trace(
@@ -131,12 +136,7 @@ Return Value:
     //enable TchTranslateToDisplayCoordinates in report.c
 
     unsigned char input_id = 0;
-    //65
-    unsigned char point[67] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                  0 };
+    unsigned char point[65];
     unsigned int ppos = 0;
     int i, finger_cnt = 0;
 
