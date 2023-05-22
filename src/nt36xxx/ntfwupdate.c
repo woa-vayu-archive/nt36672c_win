@@ -15,11 +15,11 @@ struct nvt_ts_bin_map {
 
 static struct nvt_ts_bin_map* bin_map;
 
-//NT36523 memory map
-unsigned int EVENT_BUF_ADDR = 0x2FE00;
+//NT36675 memory map
+unsigned int EVENT_BUF_ADDR = 0x22D00;
 /* Phase 2 Host Download */
 unsigned int BOOT_RDY_ADDR = 0x3F10D;
-unsigned int TX_AUTO_COPY_EN = 0x3F7E8;
+//unsigned int TX_AUTO_COPY_EN = 0x3F7E8;
 /* BLD CRC */
 unsigned int ILM_LENGTH_ADDR = 0x3F118;
 unsigned int DLM_LENGTH_ADDR = 0x3F130;
@@ -278,7 +278,7 @@ NVTLoadFirmwareFile(WDFDEVICE FxDevice, SPB_CONTEXT* SpbContext) {
         Trace(
             TRACE_LEVEL_INFORMATION,
             TRACE_INTERRUPT,
-            "Found: novatek_nt36523_fw.bin");
+            "Found: j20s_novatek_ts_fw01.bin");
 
         byteOffset.QuadPart = 0;
         ntstatus = ZwReadFile(handle, NULL, NULL, NULL, &ioStatusBlock,
@@ -454,7 +454,7 @@ NVTLoadFirmwareFile(WDFDEVICE FxDevice, SPB_CONTEXT* SpbContext) {
         DLM_LENGTH_ADDR, bin_map[1].size,
         G_DLM_CHECKSUM_ADDR, bin_map[1].crc, SpbContext);
 
-    nt36xxx_write_addr(SpbContext, TX_AUTO_COPY_EN, 0x69);
+    //nt36xxx_write_addr(SpbContext, TX_AUTO_COPY_EN, 0x69);
 
     //nvt_write_firmware
     list = 0;//unsigned int list = 0;

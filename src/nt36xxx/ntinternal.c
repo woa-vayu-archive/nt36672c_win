@@ -149,7 +149,7 @@ Return Value:
     char pen_tilt_y = 0;
     unsigned char pen_btn1 = 0;
 
-    unsigned short max_x = 1600, max_y = 2560;
+    unsigned short max_x = 1080, max_y = 2400;
 
     status = SpbReadDataSynchronously(SpbContext, 0, point, sizeof(point), TRUE);
 
