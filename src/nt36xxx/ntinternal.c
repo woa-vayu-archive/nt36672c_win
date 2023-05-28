@@ -65,7 +65,9 @@ Ft5xConfigureFunctions(
     unsigned char dataBuffer[7] = { 0, 0, 0, 0, 0, 0, 0 };
     
     delay.QuadPart = RELATIVE(MILLISECONDS(10));
-	KeDelayExecutionThread(KernelMode, TRUE, &delay);
+    KeDelayExecutionThread(KernelMode, TRUE, &delay);
+
+    nt36xxx_eng_reset(SpbContext);
 
     if (nt36xxx_bootloader_reset(SpbContext)) {
         Trace(
@@ -73,8 +75,6 @@ Ft5xConfigureFunctions(
             TRACE_INTERRUPT,
             "Can't reset the nvt IC");
     }
-
-    nt36xxx_sw_reset_idle(SpbContext);
 
     nt36xxx_set_page(SpbContext, NT36XXX_PAGE_CHIP_INFO);
 
@@ -211,7 +211,7 @@ Return Value:
     if (pen_format_id != 0xFF) {
         if (pen_format_id == 0x01) {
             pen_x = (point[66] << 8) + point[67];
-		pen_y = (point[68] << 8) + point[69];
+            pen_y = (point[68] << 8) + point[69];
             if (pen_x >= max_x * 2 - 1) {
                 pen_x -= 1;
             }

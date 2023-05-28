@@ -63,6 +63,21 @@ int nt36xxx_write_addr(IN SPB_CONTEXT* SpbContext, unsigned int addr, unsigned c
     return ret;
 }
 
+int nt36xxx_eng_reset(IN SPB_CONTEXT* SpbContext)
+{
+    LARGE_INTEGER Interval;
+    int ret;
+
+    ret = nt36xxx_write_addr(SpbContext, ENG_RST_ADDR, 0x5A);
+    if (ret)
+        return ret;
+
+    Interval.QuadPart = RELATIVE(MILLISECONDS(10));
+    KeDelayExecutionThread(KernelMode, TRUE, &Interval);
+
+    return ret;
+}
+
 int nt36xxx_bootloader_reset(IN SPB_CONTEXT* SpbContext)
 {
     LARGE_INTEGER Interval;
@@ -80,21 +95,6 @@ int nt36xxx_bootloader_reset(IN SPB_CONTEXT* SpbContext)
     if (ret)
         return ret;
 
-    return ret;
-}
-
-int nt36xxx_sw_reset_idle(IN SPB_CONTEXT* SpbContext)
-{
-    LARGE_INTEGER Interval;
-    int ret;
-
-    ret = nt36xxx_write_addr(SpbContext, SWRST_N8_ADDR, NT36XXX_CMD_SW_RESET);
-    if (ret)
-        return ret;
-
-    /* Wait until the MCU resets the fw state */
-    Interval.QuadPart = RELATIVE(MILLISECONDS(15));
-    KeDelayExecutionThread(KernelMode, FALSE, &Interval);
     return ret;
 }
 

@@ -44,6 +44,7 @@
 #define SPI_WRITE_MASK(a)	(a | 0x80)
 #define SPI_READ_MASK(a)	(a & 0x7F)
 
+#define ENG_RST_ADDR 0x7FFF80
 #define SWRST_N8_ADDR 0x03F0FE		//novatek,swrst-n8-addr
 #define SPI_RD_FAST_ADDR 0x03F310	//novatek,spi-rd-fast-addr
 
@@ -83,6 +84,6 @@ NVTLoadFirmwareFile(
 
 int nt36xxx_bootloader_reset(IN SPB_CONTEXT* SpbContext);
 
-int nt36xxx_sw_reset_idle(IN SPB_CONTEXT* SpbContext);
+int nt36xxx_eng_reset(IN SPB_CONTEXT* SpbContext);
 
 int nt36xxx_set_page(IN SPB_CONTEXT* SpbContext, IN unsigned int pageaddr);
