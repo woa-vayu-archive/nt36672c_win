@@ -466,7 +466,7 @@
     <ClInclude Include="..\include\nt36xxx\ntinternal.h" />
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="..\firmware\j20s_novatek_ts_fw01.bin">
+    <CopyFileToFolders Include="..\firmware\j20s_novatek_ts_fw02.bin">
       <FileType>Document</FileType>
     </CopyFileToFolders>
   </ItemGroup>

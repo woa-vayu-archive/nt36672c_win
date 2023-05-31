@@ -259,7 +259,7 @@ NVTLoadFirmwareFile(WDFDEVICE FxDevice, SPB_CONTEXT* SpbContext) {
         Trace(
             TRACE_LEVEL_INFORMATION,
             TRACE_INTERRUPT,
-            "Found: j20s_novatek_ts_fw01.bin");
+            "Found: j20s_novatek_ts_fw02.bin");
 
         byteOffset.QuadPart = 0;
         ntstatus = ZwReadFile(handle, NULL, NULL, NULL, &ioStatusBlock,
