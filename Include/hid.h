@@ -88,8 +88,8 @@ typedef struct _HID_PEN_REPORT {
 	USHORT X;
 	USHORT Y;
 	USHORT TipPressure;
-	USHORT XTilt;
-	USHORT YTilt;
+	CHAR XTilt;
+	CHAR YTilt;
 } HID_PEN_REPORT, * PHID_PEN_REPORT;
 #pragma pack(pop)
 
@@ -177,6 +177,9 @@ TchReadReport(
 #define X_MASK 0x40, 0x06 //1600 (0x640)
 #define Y_MASK 0x00, 0x0A //2560 (0xA00)
 
+#define X_MASK_PEN 0x80, 0x0C //3200 (0xC80)
+#define Y_MASK_PEN 0x00, 0x14 //5120 (0x1400)
+
 #define FOCALTECH_FT5X_DIGITIZER_FINGER_CONTACT \
 	BEGIN_COLLECTION, 0x02, /* Collection (Logical) */ \
 		USAGE, 0x42, /* Usage (Tip Switch) */ \
@@ -230,7 +233,7 @@ TchReadReport(
 		INPUT, 0x03, /* Input (Const,Var,Abs,No Wrap,Linear,Preferred State,No Null Position) */ \
 		USAGE_PAGE, 0x01, /* Usage Page (Generic Desktop Ctrls) */ \
 		USAGE, 0x30, /* Usage (X) */ \
-		LOGICAL_MAXIMUM_2, X_MASK, /* Logical Maximum (1440) */ \
+		LOGICAL_MAXIMUM_2, X_MASK_PEN, /* Logical Maximum (3200) */ \
 		PHYSICAL_MAXIMUM_2, X_MASK, /* Physical Maximum: 7.056 */ \
 		UNIT, 0x11, /* Unit (System: SI Linear, Length: Centimeter) */ \
 		UNIT_EXPONENT, 0x0D, /* Unit Exponent: -3 */ \
@@ -238,7 +241,7 @@ TchReadReport(
 		REPORT_COUNT, 0x01, /* Report Count (1) */ \
 		INPUT, 0x02, /* Input: (Data, Var, Abs) */ \
 		USAGE, 0x31, /* Usage (Y) */ \
-		LOGICAL_MAXIMUM_2, Y_MASK, /* Logical Maximum (2560) */ \
+		LOGICAL_MAXIMUM_2, Y_MASK_PEN, /* Logical Maximum (5120) */ \
 		PHYSICAL_MAXIMUM_2, Y_MASK, /* Physical Maximum: 12.544 */ \
 		INPUT, 0x02, /* Input: (Data, Var, Abs) */ \
 		USAGE_PAGE, 0x0D, /* Usage Page (Digitizer) */ \
@@ -246,7 +249,8 @@ TchReadReport(
 		LOGICAL_MAXIMUM, 0xFF, /* Logical Maximum (-1) */ \
 		INPUT, 0x02, /* Input: (Data, Var, Abs) */ \
 		USAGE, 0x3D, /* Usage (X Tilt) */ \
-		LOGICAL_MAXIMUM, 0x7F, /* Logical Maximum (127) */ \
+		LOGICAL_MAXIMUM, 0x3C, /* Logical Maximum (60) */ \
+		LOGICAL_MINIMUM, 0x3D, /* Logical Maximum (-61) */ \
 		REPORT_SIZE, 0x08, /* Report Size (8) */ \
 		INPUT, 0x02, /* Input: (Data, Var, Abs) */ \
 		USAGE, 0x3E, /* Usage (Y Tilt) */ \

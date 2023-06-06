@@ -145,8 +145,8 @@ Return Value:
     unsigned short pen_y = 0;
     unsigned short pen_pressure = 0;
     //unsigned short pen_distance = 0;
-    unsigned char pen_tilt_x = 0;
-    unsigned char pen_tilt_y = 0;
+    char pen_tilt_x = 0;
+    char pen_tilt_y = 0;
     unsigned char pen_btn1 = 0;
 
     unsigned short max_x = 1600, max_y = 2560;

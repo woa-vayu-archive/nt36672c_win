@@ -137,8 +137,8 @@ ReportPen(
 	IN USHORT  X,
 	IN USHORT  Y,
 	IN USHORT  TipPressure,
-	IN USHORT  XTilt,
-	IN USHORT  YTilt
+	IN CHAR  XTilt,
+	IN CHAR  YTilt
 )
 {
 	UNREFERENCED_PARAMETER(TipSwitch);

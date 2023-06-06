@@ -69,8 +69,8 @@ typedef struct _DETECTED_OBJECTS
 	OBJECT_STATE States[MAX_TOUCHES];
 	DETECTED_OBJECT_POSITION Positions[MAX_TOUCHES];
 	unsigned short PenPressure;
-	unsigned char PenTiltX;
-	unsigned char PenTiltY;
+	char PenTiltX;
+	char PenTiltY;
 	unsigned char PenBarrelSwitch;
 } DETECTED_OBJECTS;
 
@@ -112,8 +112,8 @@ ReportPen(
 	IN USHORT X,
 	IN USHORT Y,
 	IN USHORT TipPressure,
-	IN USHORT XTilt,
-	IN USHORT YTilt
+	IN CHAR XTilt,
+	IN CHAR YTilt
 );
 
 NTSTATUS
