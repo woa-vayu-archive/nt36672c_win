@@ -246,7 +246,7 @@ TchReadReport(
 		INPUT, 0x02, /* Input: (Data, Var, Abs) */ \
 		USAGE_PAGE, 0x0D, /* Usage Page (Digitizer) */ \
 		USAGE, 0x30, /* Usage (Tip Pressure) */ \
-		LOGICAL_MAXIMUM, 0xFF, /* Logical Maximum (-1) */ \
+		LOGICAL_MAXIMUM_2, 0xFF, 0x0F, /* Logical Maximum (4095) */ \
 		INPUT, 0x02, /* Input: (Data, Var, Abs) */ \
 		USAGE, 0x3D, /* Usage (X Tilt) */ \
 		LOGICAL_MAXIMUM, 0x3C, /* Logical Maximum (60) */ \
