@@ -138,7 +138,7 @@ Return Value:
     unsigned char input_id = 0;
     unsigned char point[79];
     unsigned int ppos = 0;
-    int i, finger_cnt = 0;
+    int i = 0;
     
     unsigned char pen_format_id = 0;
     unsigned short pen_x = 0;
@@ -191,9 +191,7 @@ Return Value:
             // 		obj->z = TOUCH_MAX_PRESSURE;
             // }
 
-            finger_cnt++;
-
-            Data->States[i] = OBJECT_STATE_FINGER_PRESENT_WITH_ACCURATE_POS;
+            Data->States[input_id-1] = OBJECT_STATE_FINGER_PRESENT_WITH_ACCURATE_POS;
 
             Trace(
                 TRACE_LEVEL_ERROR,
@@ -201,8 +199,8 @@ Return Value:
                 "TOUCH x: %d, y:%d",
                 obj->x, obj->y);
 
-            Data->Positions[i].X = obj->x;
-            Data->Positions[i].Y = obj->y;
+            Data->Positions[input_id-1].X = obj->x;
+            Data->Positions[input_id-1].Y = obj->y;
             //printf("x:%d y:%d point:%d\n", (int)obj->x, (int)obj->y, finger_cnt);
         }
     }
@@ -226,7 +224,7 @@ Return Value:
             //pen_btn2 = (unsigned int)((point[76] >> 1) & 0x01);
             
             //Data->States[10] = OBJECT_STATE_PEN_PRESENT_WITH_TIP;
-            Data->States[finger_cnt] = OBJECT_STATE_PEN_PRESENT_WITH_TIP;
+            Data->States[10] = OBJECT_STATE_PEN_PRESENT_WITH_TIP;
 
             Trace(
                 TRACE_LEVEL_ERROR,
@@ -235,8 +233,8 @@ Return Value:
                 pen_x, pen_y, pen_pressure, pen_tilt_x, pen_tilt_y, pen_btn1);
 
             Data->PenPressure = pen_pressure;
-            Data->Positions[finger_cnt].X = pen_x;
-            Data->Positions[finger_cnt].Y = pen_y;
+            Data->Positions[10].X = pen_x;
+            Data->Positions[10].Y = pen_y;
             Data->PenTiltX = pen_tilt_x;
             Data->PenTiltY = pen_tilt_y;
             Data->PenBarrelSwitch = pen_btn1;

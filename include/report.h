@@ -28,7 +28,7 @@
 #include <HidCommon.h>
 #include <spb.h>
 
-#define MAX_TOUCHES                32
+#define MAX_TOUCHES                11
 #define MAX_BUTTONS                3
 
 typedef struct _OBJECT_INFO
