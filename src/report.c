@@ -372,41 +372,25 @@ Return Value:
 		goto exit;
 	}
 
+	RtlZeroMemory(&HidReport, sizeof(HID_INPUT_REPORT));
+	HidReport.ReportID = REPORTID_FINGER;
+
 	while (TouchesReported != ReportContext->Cache.DownCount)
 	{
 		//
 		// Fill report with the next cached touches
 		//
-		RtlZeroMemory(&HidReport, sizeof(HID_INPUT_REPORT));
 
 		currentFingerIndex = 0;
 
 		fingersToReport = min(ReportContext->Cache.DownCount - TouchesReported, 11);
-
-		HidReport.ReportID = REPORTID_FINGER;
 
 		//
 		// There are only 16-bits for ScanTime, truncate it
 		//
 		//HidReport->ScanTime = Cache->ScanTime & 0xFFFF;
 
-		//
-		// Report the count
-		// We're sending touches using hybrid mode with 5 fingers in our
-		// report descriptor. The first report must indicate the
-		// total count of touch fingers detected by the digitizer.
-		// The remaining reports must indicate 0 for the count.
-		// The first report will have the TouchesReported integer set to 0
-		// The others will have it set to something else.
-		//
-		if (TouchesReported == 0)
-		{
-			HidReport.TouchReport.ContactCount = (UCHAR)ReportContext->Cache.DownCount;
-		}
-		else
-		{
-			HidReport.TouchReport.ContactCount = 0;
-		}
+		HidReport.TouchReport.ContactCount = (UCHAR)ReportContext->Cache.DownCount;
 
 		HasPen = FALSE;
 
@@ -497,19 +481,18 @@ Return Value:
 				goto exit;
 			}
 		}
+	}
 
-		status = TchSendReport(ReportContext->PingPongQueue, &HidReport);
+	status = TchSendReport(ReportContext->PingPongQueue, &HidReport);
+	if (!NT_SUCCESS(status))
+	{
+		Trace(
+			TRACE_LEVEL_ERROR,
+			TRACE_REPORTING,
+			"Error sending hid report for fingers - 0x%08lX",
+			status);
 
-		if (!NT_SUCCESS(status))
-		{
-			Trace(
-				TRACE_LEVEL_ERROR,
-				TRACE_REPORTING,
-				"Error sending hid report for fingers - 0x%08lX",
-				status);
-
-			goto exit;
-		}
+		goto exit;
 	}
 
 exit:
