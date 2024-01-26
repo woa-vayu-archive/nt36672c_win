@@ -227,6 +227,8 @@ NVTLoadFirmwareFile(WDFDEVICE FxDevice, SPB_CONTEXT* SpbContext) {
             RtlInitUnicodeString(&NVTFWFilePathKey, L"NVTFWImagePathTianma");
         }
     }
+    else
+        RtlInitUnicodeString(&NVTFWFilePathKey, L"NVTFWImagePathTianma");
 
     PCHAR buffer = (PCHAR)ExAllocatePoolWithTag(
         NonPagedPool,
