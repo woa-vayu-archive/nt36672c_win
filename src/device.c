@@ -28,7 +28,7 @@
 #include <hid.h>
 #include <gpio.h>
 #include <device.h>
-#include <nt36xxx/ntinternal.h>
+#include <nt36672c/ntinternal.h>
 #include <report.h>
 #include <touch_power/touch_power.h>
 #include <device.tmh>
@@ -95,7 +95,7 @@ OnInterruptIsr(
     //
     // Service touch interrupts.
     //
-    status = Ft5xServiceInterrupts(
+    status = NT36XServiceInterrupts(
         devContext->TouchContext,
         &devContext->I2CContext,
         &devContext->ReportContext);
@@ -155,7 +155,7 @@ Return Value:
     }
 
     //
-    // N.B. This FT5X chip's IRQ is level-triggered, but cannot be enabled in
+    // N.B. This NT36X chip's IRQ is level-triggered, but cannot be enabled in
     //      ACPI until passive-level interrupt handling is added to the driver.
     //      Service chip in case we missed an edge during D3 or boot-up.
     //

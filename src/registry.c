@@ -21,7 +21,7 @@
 
 --*/
 
-#include <nt36xxx\ntinternal.h>
+#include <nt36672c\ntinternal.h>
 #include <registry.tmh>
 #include <internal.h>
 
@@ -34,14 +34,14 @@
 #define TOUCH_SCREEN_SETTINGS_FF_SUB_KEY L"Settings\\FF"
 
 //
-// Default FT5X configuration values can be changed here. Please refer to the
-// FT5X specification for a full description of the fields and value meanings
+// Default NT36X configuration values can be changed here. Please refer to the
+// NT36X specification for a full description of the fields and value meanings
 //
 
-static FT5X_CONFIGURATION gDefaultConfiguration =
+static NT36X_CONFIGURATION gDefaultConfiguration =
 {
     //
-    // FT5X F01 - Device control settings
+    // NT36X F01 - Device control settings
     //
     {
         0,                                              // Sleep Mode (normal)
@@ -49,13 +49,13 @@ static FT5X_CONFIGURATION gDefaultConfiguration =
         0,                                              // Report Rate (standard)
         1,                                              // Configured
         0xff,                                           // Interrupt Enable
-        FT5X_MILLISECONDS_TO_TENTH_MILLISECONDS(20),    // Doze Interval
+        NT36X_MILLISECONDS_TO_TENTH_MILLISECONDS(20),    // Doze Interval
         10,                                             // Doze Threshold
-        FT5X_SECONDS_TO_HALF_SECONDS(2)                 // Doze Holdoff
+        NT36X_SECONDS_TO_HALF_SECONDS(2)                 // Doze Holdoff
     },
 
     //
-    // FT5X F11 - 2D Touchpad sensor settings
+    // NT36X F11 - 2D Touchpad sensor settings
     //
     {
         1,                                              // Reporting mode (throttle)
@@ -1790,17 +1790,17 @@ TchRegistryGetControllerSettings(
 
 --*/
 {
-    FT5X_CONTROLLER_CONTEXT* controller;
+    NT36X_CONTROLLER_CONTEXT* controller;
     NTSTATUS status;
 
     UNREFERENCED_PARAMETER(FxDevice);
 
-    controller = (FT5X_CONTROLLER_CONTEXT*)ControllerContext;
+    controller = (NT36X_CONTROLLER_CONTEXT*)ControllerContext;
 
     RtlCopyMemory(
         &controller->Config,
         &gDefaultConfiguration,
-        sizeof(FT5X_CONFIGURATION));
+        sizeof(NT36X_CONFIGURATION));
 
     status = STATUS_SUCCESS;
 

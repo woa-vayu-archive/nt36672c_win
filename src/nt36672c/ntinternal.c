@@ -21,13 +21,13 @@
 #include <Cross Platform Shim\compat.h>
 #include <spb.h>
 #include <report.h>
-#include <nt36xxx\ntinternal.h>
-#include <nt36xxx\ntfwupdate.h>
+#include <nt36672c\ntinternal.h>
+#include <nt36672c\ntfwupdate.h>
 #include <ntinternal.tmh>
 
 NTSTATUS
-Ft5xBuildFunctionsTable(
-      IN FT5X_CONTROLLER_CONTEXT* ControllerContext,
+NT36XBuildFunctionsTable(
+      IN NT36X_CONTROLLER_CONTEXT* ControllerContext,
       IN SPB_CONTEXT* SpbContext
 )
 {
@@ -38,8 +38,8 @@ Ft5xBuildFunctionsTable(
 }
 
 NTSTATUS
-Ft5xChangePage(
-      IN FT5X_CONTROLLER_CONTEXT* ControllerContext,
+NT36XChangePage(
+      IN NT36X_CONTROLLER_CONTEXT* ControllerContext,
       IN SPB_CONTEXT* SpbContext,
       IN int DesiredPage
 )
@@ -52,13 +52,13 @@ Ft5xChangePage(
 }
 
 NTSTATUS
-Ft5xConfigureFunctions(
-      IN FT5X_CONTROLLER_CONTEXT* ControllerContext,
+NT36XConfigureFunctions(
+      IN NT36X_CONTROLLER_CONTEXT* ControllerContext,
       IN SPB_CONTEXT* SpbContext
 )
 {
-    FT5X_CONTROLLER_CONTEXT* controller;
-    controller = (FT5X_CONTROLLER_CONTEXT*)ControllerContext;
+    NT36X_CONTROLLER_CONTEXT* controller;
+    controller = (NT36X_CONTROLLER_CONTEXT*)ControllerContext;
     
     LARGE_INTEGER delay = { 0 };
 
@@ -67,18 +67,18 @@ Ft5xConfigureFunctions(
     delay.QuadPart = RELATIVE(MILLISECONDS(10));
     KeDelayExecutionThread(KernelMode, TRUE, &delay);
 
-    nt36xxx_eng_reset(SpbContext);
+    nt36672c_eng_reset(SpbContext);
 
-    if (nt36xxx_bootloader_reset(SpbContext)) {
+    if (nt36672c_bootloader_reset(SpbContext)) {
         Trace(
             TRACE_LEVEL_ERROR,
             TRACE_INTERRUPT,
             "Can't reset the nvt IC");
     }
 
-    nt36xxx_set_page(SpbContext, NT36XXX_PAGE_CHIP_INFO);
+    nt36672c_set_page(SpbContext, nt36672c_PAGE_CHIP_INFO);
 
-    SpbReadDataSynchronously(SpbContext, SPI_READ_MASK(NT36XXX_PAGE_CHIP_INFO & NT36XXX_EVT_CHIPID), dataBuffer, sizeof(dataBuffer), FALSE);
+    SpbReadDataSynchronously(SpbContext, SPI_READ_MASK(nt36672c_PAGE_CHIP_INFO & nt36672c_EVT_CHIPID), dataBuffer, sizeof(dataBuffer), FALSE);
 
     Trace(
         TRACE_LEVEL_INFORMATION,
@@ -91,7 +91,7 @@ Ft5xConfigureFunctions(
     return STATUS_SUCCESS;
 }
 
-struct nt36xxx_abs_object {
+struct nt36672c_abs_object {
     unsigned short x;
     unsigned short y;
     unsigned short z;
@@ -101,7 +101,7 @@ struct nt36xxx_abs_object {
 #define TOUCH_MAX_FINGER_NUM 10
 
 NTSTATUS
-Ft5xGetObjectStatusFromControllerF12(
+NT36XGetObjectStatusFromControllerF12(
       IN VOID* ControllerContext,
       IN SPB_CONTEXT* SpbContext,
       IN DETECTED_OBJECTS* Data
@@ -127,11 +127,11 @@ Return Value:
 --*/
 {
     NTSTATUS status;
-    FT5X_CONTROLLER_CONTEXT* controller;
-    controller = (FT5X_CONTROLLER_CONTEXT*)ControllerContext;
+    NT36X_CONTROLLER_CONTEXT* controller;
+    controller = (NT36X_CONTROLLER_CONTEXT*)ControllerContext;
 
-    struct nt36xxx_abs_object objd = { 0, 0, 0, 0 };
-    struct nt36xxx_abs_object* obj = &objd;
+    struct nt36672c_abs_object objd = { 0, 0, 0, 0 };
+    struct nt36672c_abs_object* obj = &objd;
 
     //enable TchTranslateToDisplayCoordinates in report.c
 
@@ -247,7 +247,7 @@ exit:
 
 NTSTATUS
 TchServiceObjectInterrupts(
-      IN FT5X_CONTROLLER_CONTEXT* ControllerContext,
+      IN NT36X_CONTROLLER_CONTEXT* ControllerContext,
       IN SPB_CONTEXT* SpbContext,
       IN PREPORT_CONTEXT ReportContext
 )
@@ -260,7 +260,7 @@ TchServiceObjectInterrupts(
       //
       // See if new touch data is available
       //
-      status = Ft5xGetObjectStatusFromControllerF12(
+      status = NT36XGetObjectStatusFromControllerF12(
             ControllerContext,
             SpbContext,
             &data
@@ -298,8 +298,8 @@ exit:
 
 
 NTSTATUS
-Ft5xServiceInterrupts(
-      IN FT5X_CONTROLLER_CONTEXT* ControllerContext,
+NT36XServiceInterrupts(
+      IN NT36X_CONTROLLER_CONTEXT* ControllerContext,
       IN SPB_CONTEXT* SpbContext,
       IN PREPORT_CONTEXT ReportContext
 )
@@ -312,8 +312,8 @@ Ft5xServiceInterrupts(
 }
 
 NTSTATUS
-Ft5xSetReportingFlagsF12(
-    IN FT5X_CONTROLLER_CONTEXT* ControllerContext,
+NT36XSetReportingFlagsF12(
+    IN NT36X_CONTROLLER_CONTEXT* ControllerContext,
     IN SPB_CONTEXT* SpbContext,
     IN UCHAR NewMode,
     OUT UCHAR* OldMode
@@ -328,8 +328,8 @@ Ft5xSetReportingFlagsF12(
 }
 
 NTSTATUS
-Ft5xChangeChargerConnectedState(
-    IN FT5X_CONTROLLER_CONTEXT* ControllerContext,
+NT36XChangeChargerConnectedState(
+    IN NT36X_CONTROLLER_CONTEXT* ControllerContext,
     IN SPB_CONTEXT* SpbContext,
     IN UCHAR ChargerConnectedState
 )
@@ -342,8 +342,8 @@ Ft5xChangeChargerConnectedState(
 }
 
 NTSTATUS
-Ft5xChangeSleepState(
-    IN FT5X_CONTROLLER_CONTEXT* ControllerContext,
+NT36XChangeSleepState(
+    IN NT36X_CONTROLLER_CONTEXT* ControllerContext,
     IN SPB_CONTEXT* SpbContext,
     IN UCHAR SleepState
 )
@@ -356,8 +356,8 @@ Ft5xChangeSleepState(
 }
 
 NTSTATUS
-Ft5xGetFirmwareVersion(
-    IN FT5X_CONTROLLER_CONTEXT* ControllerContext,
+NT36XGetFirmwareVersion(
+    IN NT36X_CONTROLLER_CONTEXT* ControllerContext,
     IN SPB_CONTEXT* SpbContext
 )
 {
@@ -368,8 +368,8 @@ Ft5xGetFirmwareVersion(
 }
 
 NTSTATUS
-Ft5xCheckInterrupts(
-    IN FT5X_CONTROLLER_CONTEXT* ControllerContext,
+NT36XCheckInterrupts(
+    IN NT36X_CONTROLLER_CONTEXT* ControllerContext,
     IN SPB_CONTEXT* SpbContext,
     IN ULONG* InterruptStatus
 )
@@ -382,8 +382,8 @@ Ft5xCheckInterrupts(
 }
 
 NTSTATUS
-Ft5xConfigureInterruptEnable(
-    IN FT5X_CONTROLLER_CONTEXT* ControllerContext,
+NT36XConfigureInterruptEnable(
+    IN NT36X_CONTROLLER_CONTEXT* ControllerContext,
     IN SPB_CONTEXT* SpbContext
 )
 {

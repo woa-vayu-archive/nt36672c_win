@@ -42,7 +42,7 @@
     <Platform Condition="'$(Platform)' == ''">Win32</Platform>
     <SampleGuid>{25B3301B-A9D9-4EE3-8EA5-B1F1FBB3A18C}</SampleGuid>
     <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
-    <ProjectName>nt36xxx</ProjectName>
+    <ProjectName>nt36672c</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -170,42 +170,42 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <TargetName>nt36xxx</TargetName>
+    <TargetName>nt36672c</TargetName>
     <IntDir>..\intermediate\$(Platform)\$(ConfigurationName)\</IntDir>
     <IncludePath>$(IntDir);$(SolutionDir)..\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <TargetName>nt36xxx</TargetName>
+    <TargetName>nt36672c</TargetName>
     <IntDir>..\intermediate\$(Platform)\$(ConfigurationName)\</IntDir>
     <IncludePath>$(IntDir);$(SolutionDir)..\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <TargetName>nt36xxx</TargetName>
+    <TargetName>nt36672c</TargetName>
     <IntDir>..\intermediate\$(Platform)\$(ConfigurationName)\</IntDir>
     <IncludePath>$(IntDir);$(SolutionDir)..\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
-    <TargetName>nt36xxx</TargetName>
+    <TargetName>nt36672c</TargetName>
     <IntDir>..\intermediate\$(Platform)\$(ConfigurationName)\</IntDir>
     <IncludePath>$(IntDir);$(SolutionDir)..\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
-    <TargetName>nt36xxx</TargetName>
+    <TargetName>nt36672c</TargetName>
     <IntDir>..\intermediate\$(Platform)\$(ConfigurationName)\</IntDir>
     <IncludePath>$(IntDir);$(SolutionDir)..\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <TargetName>nt36xxx</TargetName>
+    <TargetName>nt36672c</TargetName>
     <IntDir>..\intermediate\$(Platform)\$(ConfigurationName)\</IntDir>
     <IncludePath>$(IntDir);$(SolutionDir)..\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
-    <TargetName>nt36xxx</TargetName>
+    <TargetName>nt36672c</TargetName>
     <IntDir>..\intermediate\$(Platform)\$(ConfigurationName)\</IntDir>
     <IncludePath>$(IntDir);$(SolutionDir)..\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
-    <TargetName>nt36xxx</TargetName>
+    <TargetName>nt36672c</TargetName>
     <IncludePath>$(IntDir);$(SolutionDir)..\include;$(IncludePath)</IncludePath>
     <IntDir>..\intermediate\$(Platform)\$(ConfigurationName)\</IntDir>
   </PropertyGroup>
@@ -334,7 +334,7 @@
       <AdditionalDependencies>%(AdditionalDependencies);$(DDK_LIB_PATH)\HidClass.lib</AdditionalDependencies>
     </Link>
     <CopyFileToFolders>
-      <DestinationFolders>$(OutDir);$(OutDir)\nt36xxx</DestinationFolders>
+      <DestinationFolders>$(OutDir);$(OutDir)\nt36672c</DestinationFolders>
     </CopyFileToFolders>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -412,20 +412,20 @@
       <AdditionalDependencies>%(AdditionalDependencies);$(DDK_LIB_PATH)\HidClass.lib</AdditionalDependencies>
     </Link>
     <CopyFileToFolders>
-      <DestinationFolders>$(OutDir);$(OutDir)/nt36xxx</DestinationFolders>
+      <DestinationFolders>$(OutDir);$(OutDir)/nt36672c</DestinationFolders>
     </CopyFileToFolders>
     <Inf>
       <SpecifyDriverVerDirectiveDate>false</SpecifyDriverVerDirectiveDate>
     </Inf>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Inf Exclude="@(Inf)" Include="..\src\nt36xxx.inf" />
+    <Inf Exclude="@(Inf)" Include="..\src\nt36672c.inf" />
     <FilesToPackage Include="$(TargetPath)" Condition="'$(ConfigurationType)'=='Driver' or '$(ConfigurationType)'=='DynamicLibrary'" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Cross Platform Shim\bitops.c" />
     <ClCompile Include="..\src\Cross Platform Shim\hweight.c" />
-    <ClCompile Include="..\src\nt36xxx\ntfwupdate.c" />
+    <ClCompile Include="..\src\nt36672c\ntfwupdate.c" />
     <ClCompile Include="..\src\report.c" />
     <ClCompile Include="..\src\touch_power\touch_power.c" />
     <ClCompile Include="..\src\device.c" />
@@ -438,7 +438,7 @@
     <ClCompile Include="..\src\registry.c" />
     <ClCompile Include="..\src\resolutions.c" />
     <ClCompile Include="..\src\spb.c" />
-    <ClCompile Include="..\src\nt36xxx\ntinternal.c" />
+    <ClCompile Include="..\src\nt36672c\ntinternal.c" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\src\Resource.rc" />
@@ -447,7 +447,7 @@
     <ClInclude Include="..\include\Cross Platform Shim\bitops.h" />
     <ClInclude Include="..\include\Cross Platform Shim\compat.h" />
     <ClInclude Include="..\include\Cross Platform Shim\hweight.h" />
-    <ClInclude Include="..\Include\nt36xxx\ntfwupdate.h" />
+    <ClInclude Include="..\Include\nt36672c\ntfwupdate.h" />
     <ClInclude Include="..\include\report.h" />
     <ClInclude Include="..\Include\spb.h" />
     <ClInclude Include="..\include\touch_power\public.h" />
@@ -463,7 +463,7 @@
     <ClInclude Include="..\include\resolutions.h" />
     <ClInclude Include="..\include\resource.h" />
     <ClInclude Include="..\include\trace.h" />
-    <ClInclude Include="..\include\nt36xxx\ntinternal.h" />
+    <ClInclude Include="..\include\nt36672c\ntinternal.h" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\firmware\j20s_novatek_ts_fw01.bin">

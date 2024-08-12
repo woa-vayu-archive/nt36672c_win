@@ -9,7 +9,7 @@
 
 	Abstract:
 
-		Contains FocalTech specific code for reporting samples
+		Contains NovaTek specific code for reporting samples
 
 	Environment:
 
@@ -200,7 +200,7 @@ ReportUpdateLocalObjectCache(
 
 Routine Description:
 
-	This routine takes raw data reported by the FocalTech hardware and
+	This routine takes raw data reported by the NovaTek hardware and
 	parses it to update a local cache of finger states. This routine manages
 	removing lifted touches from the cache, and manages a map between the
 	order of reported touches in hardware, and the order the driver should

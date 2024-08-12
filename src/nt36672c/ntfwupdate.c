@@ -1,4 +1,4 @@
-#include <nt36xxx\ntfwupdate.h>
+#include <nt36672c\ntfwupdate.h>
 #include <ntfwupdate.tmh>
 
 //Firmware update functions copied from linux driver
@@ -29,7 +29,7 @@ unsigned int G_ILM_CHECKSUM_ADDR = 0x3F100;
 unsigned int G_DLM_CHECKSUM_ADDR = 0x3F104;
 unsigned int BLD_CRC_EN_ADDR = 0x3F30E;
 
-int nt36xxx_set_page(IN SPB_CONTEXT* SpbContext, IN unsigned int pageaddr)
+int nt36672c_set_page(IN SPB_CONTEXT* SpbContext, IN unsigned int pageaddr)
 {
     unsigned char addr = 0xFF; //set index/page/addr command
     unsigned char buf[4] = { 0 };
@@ -40,7 +40,7 @@ int nt36xxx_set_page(IN SPB_CONTEXT* SpbContext, IN unsigned int pageaddr)
     return SpbWriteDataSynchronously(SpbContext, SPI_WRITE_MASK(addr), buf, 2);
 }
 
-int nt36xxx_write_addr(IN SPB_CONTEXT* SpbContext, unsigned int addr, unsigned char data)
+int nt36672c_write_addr(IN SPB_CONTEXT* SpbContext, unsigned int addr, unsigned char data)
 {
     int ret = 0;
 
@@ -49,7 +49,7 @@ int nt36xxx_write_addr(IN SPB_CONTEXT* SpbContext, unsigned int addr, unsigned c
     buf[0] = data;
 
     //---set xdata index---
-    ret = nt36xxx_set_page(SpbContext, addr);
+    ret = nt36672c_set_page(SpbContext, addr);
     if (ret) {
         return ret;
     }
@@ -63,12 +63,12 @@ int nt36xxx_write_addr(IN SPB_CONTEXT* SpbContext, unsigned int addr, unsigned c
     return ret;
 }
 
-int nt36xxx_eng_reset(IN SPB_CONTEXT* SpbContext)
+int nt36672c_eng_reset(IN SPB_CONTEXT* SpbContext)
 {
     LARGE_INTEGER Interval;
     int ret;
 
-    ret = nt36xxx_write_addr(SpbContext, ENG_RST_ADDR, 0x5A);
+    ret = nt36672c_write_addr(SpbContext, ENG_RST_ADDR, 0x5A);
     if (ret)
         return ret;
 
@@ -78,12 +78,12 @@ int nt36xxx_eng_reset(IN SPB_CONTEXT* SpbContext)
     return ret;
 }
 
-int nt36xxx_bootloader_reset(IN SPB_CONTEXT* SpbContext)
+int nt36672cc_bootloader_reset(IN SPB_CONTEXT* SpbContext)
 {
     LARGE_INTEGER Interval;
     int ret;
 
-    ret = nt36xxx_write_addr(SpbContext, SWRST_N8_ADDR, NT36XXX_CMD_BOOTLOADER_RESET);
+    ret = nt36672c_write_addr(SpbContext, SWRST_N8_ADDR, nt36672c_CMD_BOOTLOADER_RESET);
     if (ret)
         return ret;
 
@@ -91,7 +91,7 @@ int nt36xxx_bootloader_reset(IN SPB_CONTEXT* SpbContext)
     Interval.QuadPart = RELATIVE(MILLISECONDS(5));
     KeDelayExecutionThread(KernelMode, TRUE, &Interval);
 
-    ret = nt36xxx_write_addr(SpbContext, SPI_RD_FAST_ADDR, 0x00);
+    ret = nt36672c_write_addr(SpbContext, SPI_RD_FAST_ADDR, 0x00);
     if (ret)
         return ret;
 
@@ -108,7 +108,7 @@ static void nvt_set_bld_crc_bank(unsigned int DES_ADDR, unsigned int SRAM_ADDR,
     unsigned int G_CHECKSUM_ADDR, unsigned int crc, SPB_CONTEXT* SpbContext)
 {
     /* write destination address */
-    nt36xxx_set_page(SpbContext, DES_ADDR);
+    nt36672c_set_page(SpbContext, DES_ADDR);
     fwbuf[0] = (SRAM_ADDR) & 0xFF;
     fwbuf[1] = (SRAM_ADDR >> 8) & 0xFF;
     fwbuf[2] = (SRAM_ADDR >> 16) & 0xFF;
@@ -137,7 +137,7 @@ void nvt_bld_crc_enable(SPB_CONTEXT* SpbContext)
     unsigned char buf[20] = { 0 };
 
     //---set xdata index to BLD_CRC_EN_ADDR---
-    nt36xxx_set_page(SpbContext, BLD_CRC_EN_ADDR);
+    nt36672c_set_page(SpbContext, BLD_CRC_EN_ADDR);
 
     //---read data from index---
     buf[0] = 0xFF;
@@ -153,15 +153,15 @@ void nvt_fw_crc_enable(SPB_CONTEXT* SpbContext)
     unsigned char buf[4] = { 0 };
 
     //---set xdata index to EVENT BUF ADDR---
-    nt36xxx_set_page(SpbContext, EVENT_BUF_ADDR);
+    nt36672c_set_page(SpbContext, EVENT_BUF_ADDR);
 
     //---clear fw reset status---
     buf[0] = 0x00;
-    SpbWriteDataSynchronously(SpbContext, SPI_WRITE_MASK(NT36XXX_EVT_RESET_COMPLETE & 0x7F), buf, 1);
+    SpbWriteDataSynchronously(SpbContext, SPI_WRITE_MASK(nt36672c_EVT_RESET_COMPLETE & 0x7F), buf, 1);
 
     //---enable fw crc---
     buf[0] = 0xAE;	//enable fw crc command
-    SpbWriteDataSynchronously(SpbContext, SPI_WRITE_MASK(NT36XXX_EVT_HOST_CMD & 0x7F), buf, 1);
+    SpbWriteDataSynchronously(SpbContext, SPI_WRITE_MASK(nt36672c_EVT_HOST_CMD & 0x7F), buf, 1);
 }
 
 void nvt_boot_ready(SPB_CONTEXT* SpbContext)
@@ -169,7 +169,7 @@ void nvt_boot_ready(SPB_CONTEXT* SpbContext)
     LARGE_INTEGER delay = { 0 };
     
     //---write BOOT_RDY status cmds---
-    nt36xxx_write_addr(SpbContext, BOOT_RDY_ADDR, 1);
+    nt36672c_write_addr(SpbContext, BOOT_RDY_ADDR, 1);
     
     delay.QuadPart = RELATIVE(MILLISECONDS(5));
 	KeDelayExecutionThread(KernelMode, TRUE, &delay);
@@ -185,12 +185,12 @@ void disable_pen_input_device(SPB_CONTEXT* SpbContext, BOOLEAN disable)
 	KeDelayExecutionThread(KernelMode, TRUE, &delay);
 
     //---set xdata index to EVENT BUF ADDR---
-    nt36xxx_set_page(SpbContext, EVENT_BUF_ADDR | NT36XXX_EVT_HOST_CMD);
+    nt36672c_set_page(SpbContext, EVENT_BUF_ADDR | nt36672c_EVT_HOST_CMD);
 
     //---clear fw reset status---
     buf[0] = 0x7B;
     buf[1] = disable;
-    SpbWriteDataSynchronously(SpbContext, SPI_WRITE_MASK(NT36XXX_EVT_HOST_CMD & 0x7F), buf, 2);
+    SpbWriteDataSynchronously(SpbContext, SPI_WRITE_MASK(nt36672c_EVT_HOST_CMD & 0x7F), buf, 2);
 }
 
 NTSTATUS
@@ -459,7 +459,7 @@ NVTLoadFirmwareFile(WDFDEVICE FxDevice, SPB_CONTEXT* SpbContext) {
     );
 
     //nvt_download_firmware_hw_crc
-    nt36xxx_bootloader_reset(SpbContext);
+    nt36672c_bootloader_reset(SpbContext);
 
     /* [0] ILM */
     /* write register bank */
@@ -473,7 +473,7 @@ NVTLoadFirmwareFile(WDFDEVICE FxDevice, SPB_CONTEXT* SpbContext) {
         DLM_LENGTH_ADDR, bin_map[1].size,
         G_DLM_CHECKSUM_ADDR, bin_map[1].crc, SpbContext);
 
-    //nt36xxx_write_addr(SpbContext, TX_AUTO_COPY_EN, 0x69);
+    //nt36672c_write_addr(SpbContext, TX_AUTO_COPY_EN, 0x69);
 
     //nvt_write_firmware
     list = 0;//unsigned int list = 0;
@@ -523,7 +523,7 @@ NVTLoadFirmwareFile(WDFDEVICE FxDevice, SPB_CONTEXT* SpbContext) {
             len = (unsigned short)((size < NVT_TRANSFER_LEN) ? size : NVT_TRANSFER_LEN);
 
             //---set xdata index to start address of SRAM---
-            ret = nt36xxx_set_page(SpbContext, SRAM_addr);
+            ret = nt36672c_set_page(SpbContext, SRAM_addr);
             if (ret) {
                 Trace(
                     TRACE_LEVEL_INFORMATION,

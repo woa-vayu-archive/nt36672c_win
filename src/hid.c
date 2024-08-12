@@ -23,7 +23,7 @@
 #include <Cross Platform Shim\compat.h>
 #include <internal.h>
 #include <controller.h>
-#include <nt36xxx\ntinternal.h>
+#include <nt36672c\ntinternal.h>
 #include <hid.h>
 #include <hid.tmh>
 
@@ -31,7 +31,7 @@ const USHORT gOEMVendorID = 0x6674;    // "ft"
 const USHORT gOEMProductID = 0x3578;    // "5x"
 const USHORT gOEMVersionID = 3200;
 
-const PWSTR gpwstrManufacturerID = L"FocalTech";
+const PWSTR gpwstrManufacturerID = L"NovaTek";
 const PWSTR gpwstrProductID = L"5x06";
 const PWSTR gpwstrSerialNumber = L"5x06";
 
@@ -40,14 +40,14 @@ const PWSTR gpwstrSerialNumber = L"5x06";
 //
 
 const UCHAR gReportDescriptor[] = {
-	//FOCALTECH_FT5X_DIGITIZER_DIAGNOSTIC1,
-	//FOCALTECH_FT5X_DIGITIZER_DIAGNOSTIC2,
-	//FOCALTECH_FT5X_DIGITIZER_DIAGNOSTIC3,
-	//FOCALTECH_FT5X_DIGITIZER_DIAGNOSTIC4,
-	FOCALTECH_FT5X_DIGITIZER_FINGER,
-	FOCALTECH_FT5X_DIGITIZER_REPORTMODE,
-	//FOCALTECH_FT5X_DIGITIZER_KEYPAD,
-	FOCALTECH_FT5X_DIGITIZER_STYLUS
+	//NOVATEK_NT36X_DIGITIZER_DIAGNOSTIC1,
+	//NOVATEK_NT36X_DIGITIZER_DIAGNOSTIC2,
+	//NOVATEK_NT36X_DIGITIZER_DIAGNOSTIC3,
+	//NOVATEK_NT36X_DIGITIZER_DIAGNOSTIC4,
+	NOVATEK_NT36X_DIGITIZER_FINGER,
+	NOVATEK_NT36X_DIGITIZER_REPORTMODE,
+	//NOVATEK_NT36X_DIGITIZER_KEYPAD,
+	NOVATEK_NT36X_DIGITIZER_STYLUS
 };
 const ULONG gdwcbReportDescriptor = sizeof(gReportDescriptor);
 
@@ -288,7 +288,7 @@ Return Value:
 	//
 	if (devContext->ServiceInterruptsAfterD0Entry == TRUE)
 	{
-		Ft5xServiceInterrupts(
+		NT36XServiceInterrupts(
 			devContext->TouchContext,
 			&devContext->I2CContext,
 			&devContext->ReportContext);
@@ -390,12 +390,12 @@ TchGenerateHidReportDescriptor(
 )
 {
 	PDEVICE_EXTENSION devContext;
-	FT5X_CONTROLLER_CONTEXT* touchContext;
+	NT36X_CONTROLLER_CONTEXT* touchContext;
 	NTSTATUS status;
 
 	devContext = GetDeviceContext(Device);
 
-	touchContext = (FT5X_CONTROLLER_CONTEXT*)devContext->TouchContext;
+	touchContext = (NT36X_CONTROLLER_CONTEXT*)devContext->TouchContext;
 
 	PUCHAR hidReportDescBuffer = (PUCHAR)ExAllocatePoolWithTag(
 		NonPagedPool,
@@ -905,9 +905,9 @@ Return Value:
 		capsReport->MaximumContactPoints = PTP_MAX_CONTACT_POINTS;
 		capsReport->ReportID = REPORTID_DEVICE_CAPS;
 
-		if (devContext->TouchContext != NULL && ((FT5X_CONTROLLER_CONTEXT*)devContext->TouchContext)->MaxFingers != 0)
+		if (devContext->TouchContext != NULL && ((NT36X_CONTROLLER_CONTEXT*)devContext->TouchContext)->MaxFingers != 0)
 		{
-			capsReport->MaximumContactPoints = ((FT5X_CONTROLLER_CONTEXT*)devContext->TouchContext)->MaxFingers;
+			capsReport->MaximumContactPoints = ((NT36X_CONTROLLER_CONTEXT*)devContext->TouchContext)->MaxFingers;
 		}
 
 		Trace(

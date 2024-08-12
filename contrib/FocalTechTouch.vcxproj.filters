@@ -25,10 +25,10 @@
     <Filter Include="Source Files\touch_power">
       <UniqueIdentifier>{48991f5f-ce72-428a-bb02-7ff9f171fa57}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\nt36xxx">
+    <Filter Include="Source Files\nt36672c">
       <UniqueIdentifier>{e315ae58-595b-4761-a85d-b9f815945abc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\nt36xxx">
+    <Filter Include="Header Files\nt36672c">
       <UniqueIdentifier>{1a4a2c90-09cc-463b-b270-18cd15f46d6c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -75,7 +75,7 @@
     <ClCompile Include="..\src\report.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\nt36xxx\ntinternal.c" />
+    <ClCompile Include="..\src\nt36672c\ntinternal.c" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\src\Resource.rc">
@@ -83,7 +83,7 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Inf Include="..\src\nt36xxx.inf">
+    <Inf Include="..\src\nt36672c.inf">
       <Filter>Driver Files</Filter>
     </Inf>
   </ItemGroup>
@@ -142,6 +142,6 @@
     <ClInclude Include="..\include\report.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\nt36xxx\ntinternal.h" />
+    <ClInclude Include="..\include\nt36672c\ntinternal.h" />
   </ItemGroup>
 </Project>

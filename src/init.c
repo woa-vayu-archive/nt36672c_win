@@ -9,7 +9,7 @@
 
 	Abstract:
 
-		Contains FocalTech initialization code
+		Contains NovaTek initialization code
 
 	Environment:
 
@@ -21,7 +21,7 @@
 
 #include <Cross Platform Shim\compat.h>
 #include <spb.h>
-#include <nt36xxx\ntinternal.h>
+#include <nt36672c\ntinternal.h>
 #include <init.tmh>
 
 NTSTATUS
@@ -49,18 +49,18 @@ TchStartDevice(
 
 --*/
 {
-	FT5X_CONTROLLER_CONTEXT* controller;
+	NT36X_CONTROLLER_CONTEXT* controller;
 	ULONG interruptStatus;
 	NTSTATUS status;
 
-	controller = (FT5X_CONTROLLER_CONTEXT*)ControllerContext;
+	controller = (NT36X_CONTROLLER_CONTEXT*)ControllerContext;
 	interruptStatus = 0;
 	status = STATUS_SUCCESS;
 
 	//
-	// Populate context with FT5X function descriptors
+	// Populate context with NT36X function descriptors
 	//
-	status = Ft5xBuildFunctionsTable(
+	status = NT36XBuildFunctionsTable(
 		ControllerContext,
 		SpbContext);
 
@@ -69,15 +69,15 @@ TchStartDevice(
 		Trace(
 			TRACE_LEVEL_ERROR,
 			TRACE_INIT,
-			"Could not build table of FT5X functions - 0x%08lX",
+			"Could not build table of NT36X functions - 0x%08lX",
 			status);
 		goto exit;
 	}
 
 	//
-	// Initialize FT5X function control registers
+	// Initialize NT36X function control registers
 	//
-	status = Ft5xConfigureFunctions(
+	status = NT36XConfigureFunctions(
 		ControllerContext,
 		SpbContext);
 
@@ -92,7 +92,7 @@ TchStartDevice(
 		goto exit;
 	}
 
-	status = Ft5xConfigureInterruptEnable(
+	status = NT36XConfigureInterruptEnable(
 		ControllerContext,
 		SpbContext);
 
@@ -109,7 +109,7 @@ TchStartDevice(
 	//
 	// Read and store the firmware version
 	//
-	status = Ft5xGetFirmwareVersion(
+	status = NT36XGetFirmwareVersion(
 		ControllerContext,
 		SpbContext);
 
@@ -118,7 +118,7 @@ TchStartDevice(
 		Trace(
 			TRACE_LEVEL_ERROR,
 			TRACE_INIT,
-			"Could not get FT5X firmware version - 0x%08lX",
+			"Could not get NT36X firmware version - 0x%08lX",
 			status);
 		goto exit;
 	}
@@ -126,7 +126,7 @@ TchStartDevice(
 	//
 	// Clear any pending interrupts
 	//
-	status = Ft5xCheckInterrupts(
+	status = NT36XCheckInterrupts(
 		ControllerContext,
 		SpbContext,
 		&interruptStatus
@@ -167,11 +167,11 @@ Return Value:
 	NTSTATUS indicating sucess or failure
 --*/
 {
-	FT5X_CONTROLLER_CONTEXT* controller;
+	NT36X_CONTROLLER_CONTEXT* controller;
 
 	UNREFERENCED_PARAMETER(SpbContext);
 
-	controller = (FT5X_CONTROLLER_CONTEXT*)ControllerContext;
+	controller = (NT36X_CONTROLLER_CONTEXT*)ControllerContext;
 
 	return STATUS_SUCCESS;
 }
@@ -197,12 +197,12 @@ Return Value:
 	NTSTATUS indicating sucess or failure
 --*/
 {
-	FT5X_CONTROLLER_CONTEXT* context;
+	NT36X_CONTROLLER_CONTEXT* context;
 	NTSTATUS status;
 	
 	context = ExAllocatePoolWithTag(
 		NonPagedPoolNx,
-		sizeof(FT5X_CONTROLLER_CONTEXT),
+		sizeof(NT36X_CONTROLLER_CONTEXT),
 		TOUCH_POOL_TAG);
 
 	if (NULL == context)
@@ -216,7 +216,7 @@ Return Value:
 		goto exit;
 	}
 
-	RtlZeroMemory(context, sizeof(FT5X_CONTROLLER_CONTEXT));
+	RtlZeroMemory(context, sizeof(NT36X_CONTROLLER_CONTEXT));
 	context->FxDevice = FxDevice;
 
 	//
@@ -271,9 +271,9 @@ Return Value:
 	NTSTATUS indicating sucess or failure
 --*/
 {
-	FT5X_CONTROLLER_CONTEXT* controller;
+	NT36X_CONTROLLER_CONTEXT* controller;
 
-	controller = (FT5X_CONTROLLER_CONTEXT*)ControllerContext;
+	controller = (NT36X_CONTROLLER_CONTEXT*)ControllerContext;
 
 	if (controller != NULL)
 	{

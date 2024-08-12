@@ -9,7 +9,7 @@
 
     Abstract:
 
-        Contains FocalTech power-on and power-off functionality
+        Contains NovaTek power-on and power-off functionality
 
     Environment:
 
@@ -22,8 +22,8 @@
 #include <Cross Platform Shim\compat.h>
 #include <controller.h>
 #include <spb.h>
-#include <nt36xxx\ntinternal.h>
-#include <nt36xxx\ntfwupdate.h>
+#include <nt36672c\ntinternal.h>
+#include <nt36672c\ntfwupdate.h>
 #include <internal.h>
 #include <touch_power\touch_power.h>
 #include <power.tmh>
@@ -38,7 +38,7 @@ TchPowerSettingCallback(
 {
     NTSTATUS status = STATUS_SUCCESS;
     PDEVICE_EXTENSION devContext = NULL;
-    FT5X_CONTROLLER_CONTEXT* ControllerContext = NULL;
+    NT36X_CONTROLLER_CONTEXT* ControllerContext = NULL;
     SPB_CONTEXT* SpbContext = NULL;
 
     if (Context == NULL)
@@ -54,7 +54,7 @@ TchPowerSettingCallback(
     }
 
     devContext = (PDEVICE_EXTENSION)Context;
-    ControllerContext = (FT5X_CONTROLLER_CONTEXT*)devContext->TouchContext;
+    ControllerContext = (NT36X_CONTROLLER_CONTEXT*)devContext->TouchContext;
     SpbContext = &(devContext->I2CContext);
 
     //
@@ -89,7 +89,7 @@ TchPowerSettingCallback(
                 TRACE_POWER,
                 "On Battery Power");
 
-            status = Ft5xChangeChargerConnectedState(
+            status = NT36XChangeChargerConnectedState(
                 ControllerContext,
                 SpbContext,
                 0
@@ -113,7 +113,7 @@ TchPowerSettingCallback(
                 TRACE_POWER,
                 "On External Power");
 
-            status = Ft5xChangeChargerConnectedState(
+            status = NT36XChangeChargerConnectedState(
                 ControllerContext,
                 SpbContext,
                 1
@@ -187,10 +187,10 @@ TchPowerSettingCallback(
                 &GestureEnabled,
                 sizeof(DWORD))) && GestureEnabled == 1)
             {
-                status = Ft5xSetReportingFlagsF12(
+                status = NT36XSetReportingFlagsF12(
                     ControllerContext,
                     SpbContext,
-                    FT5X_F12_REPORTING_WAKEUP_GESTURE_MODE,
+                    NT36X_F12_REPORTING_WAKEUP_GESTURE_MODE,
                     NULL
                 );
 
@@ -206,7 +206,7 @@ TchPowerSettingCallback(
             }
             /*else {
                 //Write command to enter "deep sleep mode" if wake up gesture is disabled
-                SpbWriteDataSynchronously(SpbContext, SPI_WRITE_MASK(NT36XXX_EVT_HOST_CMD), buf, 1);
+                SpbWriteDataSynchronously(SpbContext, SPI_WRITE_MASK(nt36672c_EVT_HOST_CMD), buf, 1);
             }*/
 
             if (!NT_SUCCESS(status))
@@ -238,10 +238,10 @@ TchPowerSettingCallback(
                 goto exit;
             }
 
-            status = Ft5xSetReportingFlagsF12(
+            status = NT36XSetReportingFlagsF12(
                 ControllerContext,
                 SpbContext,
-                FT5X_F12_REPORTING_CONTINUOUS_MODE,
+                NT36X_F12_REPORTING_CONTINUOUS_MODE,
                 NULL
             );
 
@@ -302,10 +302,10 @@ Return Value:
 
 --*/
 {
-    FT5X_CONTROLLER_CONTEXT* controller;
+    NT36X_CONTROLLER_CONTEXT* controller;
     NTSTATUS status;
 
-    controller = (FT5X_CONTROLLER_CONTEXT*) ControllerContext;
+    controller = (NT36X_CONTROLLER_CONTEXT*) ControllerContext;
 
     //
     // Check if we were already on
@@ -320,10 +320,10 @@ Return Value:
     //
     // Attempt to put the controller into operating mode 
     //
-    status = Ft5xChangeSleepState(
+    status = NT36XChangeSleepState(
         controller,
         SpbContext,
-        FT5X_F01_DEVICE_CONTROL_SLEEP_MODE_OPERATING);
+        NT36X_F01_DEVICE_CONTROL_SLEEP_MODE_OPERATING);
 
     if (!NT_SUCCESS(status))
     {
@@ -363,10 +363,10 @@ Return Value:
 
 --*/
 {
-    FT5X_CONTROLLER_CONTEXT* controller;
+    NT36X_CONTROLLER_CONTEXT* controller;
     NTSTATUS status;
 
-    controller = (FT5X_CONTROLLER_CONTEXT*) ControllerContext;
+    controller = (NT36X_CONTROLLER_CONTEXT*) ControllerContext;
 
     //
     // Interrupts are now disabled but the ISR may still be
@@ -378,10 +378,10 @@ Return Value:
     //
     // Put the chip in sleep mode
     //
-    status = Ft5xChangeSleepState(
+    status = NT36XChangeSleepState(
         ControllerContext,
         SpbContext,
-        FT5X_F01_DEVICE_CONTROL_SLEEP_MODE_SLEEPING);
+        NT36X_F01_DEVICE_CONTROL_SLEEP_MODE_SLEEPING);
 
     if (!NT_SUCCESS(status))
     {
