@@ -260,7 +260,7 @@ NVTLoadFirmwareFile(WDFDEVICE FxDevice, SPB_CONTEXT* SpbContext) {
 
     ntFWPath.Length = 0;
     ntFWPath.MaximumLength = 256 * sizeof(WCHAR);
-    ntFWPath.Buffer = ExAllocatePoolWithTag(NonPagedPool, ntFWPath.MaximumLength, TOUCH_POOL_TAG);
+    ntFWPath.Buffer = ExAllocatePoolZero(NonPagedPool, ntFWPath.MaximumLength, TOUCH_POOL_TAG);
 
     RtlAppendUnicodeToString(&ntFWPath, L"\\DosDevices\\");
     RtlAppendUnicodeStringToString(&ntFWPath, &uniName);
@@ -362,7 +362,7 @@ NVTLoadFirmwareFile(WDFDEVICE FxDevice, SPB_CONTEXT* SpbContext) {
         ovly_info, ilm_dlm_num, ovly_sec_num, info_sec_num, partition);
 
     /* allocated memory for header info */
-    bin_map = (struct nvt_ts_bin_map*)(PUCHAR)ExAllocatePoolWithTag(
+    bin_map = (struct nvt_ts_bin_map*)(PUCHAR)ExAllocatePoolZero(
         NonPagedPool,
         (partition + 1) * sizeof(struct nvt_ts_bin_map),
         TOUCH_POOL_TAG
@@ -452,7 +452,7 @@ NVTLoadFirmwareFile(WDFDEVICE FxDevice, SPB_CONTEXT* SpbContext) {
     //nvt_bin_header_parser end
 
     //nvt_download_init
-    fwbuf = (PUCHAR)ExAllocatePoolWithTag(
+    fwbuf = (PUCHAR)ExAllocatePoolZero(
         NonPagedPool,
         NVT_TRANSFER_LEN + 2,
         TOUCH_POOL_TAG

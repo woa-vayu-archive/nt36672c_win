@@ -24,6 +24,8 @@
 #include <nt36xxx\ntinternal.h>
 #include <init.tmh>
 
+#define POOL_ZERO_DOWN_LEVEL_SUPPORT
+
 NTSTATUS
 TchStartDevice(
 	IN VOID* ControllerContext,
@@ -52,6 +54,8 @@ TchStartDevice(
 	FT5X_CONTROLLER_CONTEXT* controller;
 	ULONG interruptStatus;
 	NTSTATUS status;
+
+	ExInitializeDriverRuntime(0);
 
 	controller = (FT5X_CONTROLLER_CONTEXT*)ControllerContext;
 	interruptStatus = 0;
@@ -200,7 +204,7 @@ Return Value:
 	FT5X_CONTROLLER_CONTEXT* context;
 	NTSTATUS status;
 	
-	context = ExAllocatePoolWithTag(
+	context = ExAllocatePoolZero(
 		NonPagedPoolNx,
 		sizeof(FT5X_CONTROLLER_CONTEXT),
 		TOUCH_POOL_TAG);
